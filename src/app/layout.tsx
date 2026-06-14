@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "@/styles/index.css";
 import { ThemeProvider } from "@/theme/ThemeProvider";
+import { AuthProvider } from "@/lib/auth/AuthProvider";
 import { gardeners } from "@config/verticals/gardeners";
 
 export const metadata: Metadata = {
@@ -18,8 +19,11 @@ export default function RootLayout({
     <html lang="en-GB">
       <body>
         {/* ThemeProvider applies the active vertical's design tokens as CSS
-            variables at runtime — one codebase re-skins per vertical. */}
-        <ThemeProvider tokens={gardeners.theme}>{children}</ThemeProvider>
+            variables at runtime — one codebase re-skins per vertical.
+            AuthProvider exposes the magic-link session to the owner workspace. */}
+        <ThemeProvider tokens={gardeners.theme}>
+          <AuthProvider>{children}</AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
