@@ -1,0 +1,18 @@
+# Supabase local config. Run `supabase start` then `supabase db reset` to apply
+# migrations + seed.sql. Keep all privileged keys in `supabase secrets set`.
+project_id = "locallens"
+
+[db]
+port = 54322
+major_version = 15
+
+[studio]
+port = 54323
+
+[api]
+port = 54321
+schemas = ["public", "etl"]
+extra_search_path = ["public", "extensions"]
+
+[auth]
+site_url = "http://localhost:5173"

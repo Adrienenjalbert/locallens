@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Default token values. A vertical config overrides these at runtime via the
+   ThemeProvider, which sets the same CSS variables on :root. */
+:root {
+  --ll-primary: 152 55% 34%;
+  --ll-primary-foreground: 0 0% 100%;
+  --ll-secondary: 30 40% 96%;
+  --ll-secondary-foreground: 150 12% 14%;
+  --ll-accent: 84 60% 45%;
+  --ll-accent-foreground: 150 12% 14%;
+  --ll-success: 142 71% 38%;
+  --ll-warning: 38 92% 50%;
+  --ll-danger: 0 72% 51%;
+  --ll-background: 60 33% 99%;
+  --ll-foreground: 150 12% 14%;
+  --ll-card: 0 0% 100%;
+  --ll-card-foreground: 150 12% 14%;
+  --ll-muted: 150 12% 96%;
+  --ll-muted-foreground: 150 6% 42%;
+  --ll-border: 150 12% 88%;
+  --ll-input: 150 12% 88%;
+  --ll-ring: 152 55% 34%;
+  --ll-radius: 0.75rem;
+  --ll-font-sans: "Inter", system-ui, sans-serif;
+  --ll-font-display: "Fraunces", Georgia, serif;
+}
+
+* {
+  border-color: hsl(var(--ll-border));
+}
+
+body {
+  background-color: hsl(var(--ll-background));
+  color: hsl(var(--ll-foreground));
+  font-family: var(--ll-font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Visible focus ring for accessibility (WCAG 2.1 AA). */
+:focus-visible {
+  outline: 2px solid hsl(var(--ll-ring));
+  outline-offset: 2px;
+}
