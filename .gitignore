@@ -21,6 +21,14 @@ next-env.d.ts
 .env.*
 !.env.example
 supabase/.env
+tools/outreach/.env.outreach
+
+# outreach run outputs (generated artifacts)
+tools/outreach/out/
+tools/outreach/.env.outreach
+
+# outreach engine output (generated lead lists)
+tools/outreach/out/
 
 # supabase local
 supabase/.branches

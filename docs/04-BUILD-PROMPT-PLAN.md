@@ -27,7 +27,7 @@ Revises `Lovable-Prompt-Plan.md`. Keeps all the original prompts (they were good
 | **A5** | **Affiliate compliance (disclosure, rel, consent) — gated in `<MonetisationSlot/>`** | ✅ |
 | **A6** | **Live wiring: `<MonetisationSlot/>` fetches server candidates (static SSG fallback)** | ✅ `useRouterDecision` + `router-candidates` |
 | 21 | Page-readiness scoring + publish gate (affiliate-aware) | ✅ 🔁 `src/lib/scoring/page-readiness.ts` (tested) + `etl-score` |
-| 7 | Searcher tools (cost estimator + comparator) with shareable result URLs | ◻ |
+| 7 | Searcher tools (cost estimator + comparator) — answer-first, FAQ + JSON-LD, shareable URLs, ending MonetisationSlot | ✅ `src/app/tools/[tool]`, `src/views/tools/*`, `src/components/tools/*`, `src/lib/tools/*` |
 
 **Stage 0 outcome:** a live directory in one vertical/metro earning **affiliate RPM from organic traffic with zero operators.** Proves intent value + funds the rest.
 
@@ -37,12 +37,12 @@ Revises `Lovable-Prompt-Plan.md`. Keeps all the original prompts (they were good
 
 | Step | What | State |
 |---|---|---|
-| 8 | Supply flywheel: claim → verify → owner dashboard → portfolio (RLS) | ◻ |
-| 13 | Free business tools (quote/invoice generators, pricing calc, get-found score) | ◻ |
-| 14 | CRM data layer + owner workspace shell (`/app`) | ◻ schema ✅ |
-| 15 | Leads inbox (directory tie-in, `session_id` link) + customers | ◻ 🔁 |
-| 16 | Quotes → jobs/scheduling (recurring) → invoicing | ◻ |
-| 17 | Automated comms & lifecycle journeys (speed-to-lead, follow-up, review request, overdue) | ◻ 🔁 |
+| 8 | Supply flywheel: claim → verify (magic-link) → owner dashboard ("Get found" / improve-your-rank) → portfolio editor (RLS) | ✅ `src/app/claim`, `src/app/app/profile`, `OwnerDashboard`, `ProfileView`, `PortfolioEditor` |
+| 13 | Free business tools (quote/invoice generators, pricing calc, get-found score) | ◻ (CRM quote/invoice builders exist; standalone public biz-tool pages next) |
+| 14 | CRM data layer + owner workspace shell (`/app`) | ✅ `AppShell`, `/app` layout, `src/lib/crm/*`, `AuthProvider` |
+| 15 | Leads inbox (directory tie-in, `session_id` link) + customers | ✅ 🔁 `src/app/app/leads`, `customers` (speed-to-lead timer) |
+| 16 | Quotes → jobs/scheduling (recurring) → invoicing | ✅ `src/app/app/quotes`, `jobs`, `invoices` + `LifecycleStepper` |
+| 17 | Automated comms & lifecycle journeys (speed-to-lead, follow-up, review request, overdue) | ✅ 🔁 `journey-engine`, `seed-journeys`, `_shared/journeys.ts`, `/app/settings` |
 | 18 | Monetisation: Stripe (CRM entry + Growth package), freemium gates, **lead rail live** | ◻ 🔁 |
 
 **Stage 1 outcome:** sessions can now route to **operators/leads** as well as affiliate. Proof-led outreach uses affiliate-proven traffic + captured leads.
