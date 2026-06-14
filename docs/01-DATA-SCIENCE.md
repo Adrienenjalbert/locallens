@@ -120,9 +120,12 @@ opportunity = volume × intent_weight × competition_gap        (demand)
 
 | Model | Config | Code (now) | Persisted | Loop reads |
 |---|---|---|---|---|
-| Quality Score | `vertical.score_weights` | `etl-score` Edge fn (spec) | `business.score_breakdown` | lead rate by score band |
-| Intent | keyword `intent`/`funnel` rules | server (spec) | `session.intent_*` | stage→outcome |
-| RevenueRouter | `vertical.router_policy` | `src/lib/revenue-router/` ✅ | `router_decision`, `touch`, `conversion` | `revenue_per_session` view (RPM) |
-| Opportunity | thresholds in config | `etl-keywords` Edge fn (spec) | `keyword.opportunity_score` | indexed→clicks→RPM |
+| Quality Score | `vertical.score_weights` | ✅ `src/lib/scoring/` (tested, Node) + `_shared/scoring.ts` (Deno) used by `etl-score` | `business.score_breakdown` | lead rate by score band |
+| Page-readiness | thresholds in `page-readiness.ts` | ✅ `src/lib/scoring/page-readiness.ts` (tested) + `etl-score` | `page_readiness` | publish/hold + enrichment queue |
+| Intent | keyword `intent`/`funnel` rules | ◻ rules in `router-candidates` (v1) | `session.intent_*` | stage→outcome |
+| RevenueRouter | `vertical.router_policy` | ✅ `src/lib/revenue-router/` + `useRouterDecision` + `router-candidates` | `router_decision`, `touch`, `conversion` | `revenue_per_session` view (RPM) |
+| Opportunity | thresholds in config | ◻ `etl-keywords` Edge fn (spec) | `keyword.opportunity_score` | indexed→clicks→RPM |
 
-✅ = implemented in this scaffold. The router is real, tested code; the ETL/scoring functions are specified for the build phase (they need live API keys).
+✅ = implemented in this scaffold. ETL (`etl-extract/normalise/resolve/score`) and affiliate/router Edge Functions are built; they gracefully no-op without live API keys so the pipeline can be exercised locally.
+
+> **Two copies of the scoring math, by necessity:** the pure functions are duplicated in `src/lib/scoring/` (Node, unit-tested source of truth) and `supabase/functions/_shared/scoring.ts` (Deno, used by `etl-score`) because Node and Deno can't share module-aliased imports cleanly. A header comment in each flags the keep-in-sync requirement.

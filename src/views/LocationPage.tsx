@@ -98,12 +98,17 @@ export function LocationPage({
         ))}
       </section>
 
-      {/* Optimisable slot: the router decides affiliate vs lead vs nothing. */}
+      {/* Optimisable slot: the router decides affiliate vs lead vs nothing.
+          Renders with static candidates for SSG, then upgrades to live
+          server-built candidates (EPC, relevance, resolved click URL) when a
+          backend is configured. */}
       <MonetisationSlot
         slot="inline-after-shortlist"
         context={baseContext}
-        policy={gardeners.routerPolicy}
+        policy={config.routerPolicy}
         candidates={candidates}
+        fetchLive
+        keywords={["insurance", "lawn", "maintenance"]}
         resolveAffiliate={(ref) => AFFILIATE_DATA[ref]}
       />
     </main>

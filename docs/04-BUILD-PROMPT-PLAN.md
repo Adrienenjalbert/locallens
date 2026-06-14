@@ -16,15 +16,17 @@ Revises `Lovable-Prompt-Plan.md`. Keeps all the original prompts (they were good
 | 0 | Project scaffold (Vite+React+TS+Tailwind, config dirs, Supabase wiring) | ✅ |
 | 1 | Tokenised design system + component library + `/styleguide` | ✅ partial (tokens, ThemeProvider, core components) |
 | 2 | Data model migrations (golden records, ETL, **affiliate/revenue**, CRM, loop, RLS) | ✅ |
-| 3 | ETL extract + normalise (Google Places + Apify) — server-side, idempotent, observable | ◻ |
-| 4 | ETL dedup + validate + enrich + load → golden records + provenance + confidence | ◻ |
-| 5 | Quality Score (config-driven, explainable, `score_breakdown`) | ◻ 🔁 |
+| 3 | ETL extract + normalise (Google Places + Apify) — server-side, idempotent, observable | ✅ `etl-extract`, `etl-normalise` |
+| 4 | ETL dedup + validate + enrich + load → golden records + provenance + confidence | ✅ `etl-resolve` |
+| 5 | Quality Score (config-driven, explainable, `score_breakdown`) | ✅ 🔁 `src/lib/scoring/` (tested) + `etl-score` |
 | 6 | Core directory pages (location/profile/service-location) — answer-first, schema, AEO | ◻ partial (LocationPage demo) |
 | **A1** | **Affiliate catalogue + partner/offer/placement admin** | ✅ schema + seed; ◻ admin UI |
 | **A2** | **RevenueRouter + MonetisationSlot + AffiliateUnit (trust floor in code)** | ✅ |
 | **A3** | **Intent classifier (rules v1) → session.intent_*** | ◻ |
 | **A4** | **Attribution spine + click-resolution + postback webhooks + candidate-build + RPM view** | ✅ schema/view + Edge Functions (`affiliate-redirect`, `affiliate-postback`, `router-candidates`) |
 | **A5** | **Affiliate compliance (disclosure, rel, consent) — gated in `<MonetisationSlot/>`** | ✅ |
+| **A6** | **Live wiring: `<MonetisationSlot/>` fetches server candidates (static SSG fallback)** | ✅ `useRouterDecision` + `router-candidates` |
+| 21 | Page-readiness scoring + publish gate (affiliate-aware) | ✅ 🔁 `src/lib/scoring/page-readiness.ts` (tested) + `etl-score` |
 | 7 | Searcher tools (cost estimator + comparator) with shareable result URLs | ◻ |
 
 **Stage 0 outcome:** a live directory in one vertical/metro earning **affiliate RPM from organic traffic with zero operators.** Proves intent value + funds the rest.

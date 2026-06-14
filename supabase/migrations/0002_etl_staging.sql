@@ -7,6 +7,12 @@
 
 create schema if not exists etl;
 
+-- The ETL schema is server-only. Edge Functions use the service role, which
+-- needs usage + table privileges here. (No anon/authenticated grants — the
+-- front end must never read raw/staging data.)
+grant usage on schema etl to service_role;
+alter default privileges in schema etl grant all on tables to service_role;
+
 create table etl.raw_payload (
   id           uuid primary key default uuid_generate_v4(),
   vertical_id  uuid not null,
@@ -47,3 +53,6 @@ create table pipeline_run (
   counts      jsonb,                          -- {extracted,new,updated,rejected,flagged}
   status      text not null default 'running' -- running|ok|error
 );
+
+-- Explicit grants for the just-created etl tables (service role only).
+grant all on all tables in schema etl to service_role;
