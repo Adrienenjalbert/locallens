@@ -33,8 +33,8 @@ Visitor + context ─► RevenueRouter (policy) ─► argmax E[revenue] within 
         CRISP-DM loop reads outcomes → updates config → engine improves itself
 ```
 
-- **Front end:** React + Vite + TypeScript + Tailwind (CSS-variable design tokens → a vertical re-skins from config at runtime).
-- **Backend:** Supabase (Postgres + PostGIS + Auth + Storage + Edge Functions + cron). The FE only reads **golden records** + active offers; all ETL/scraper/affiliate/comms/billing keys stay server-side.
+- **Front end:** Next.js (App Router) + TypeScript + Tailwind, **statically exported** (`output: 'export'`) and hosted on **GitHub Pages**. CSS-variable design tokens → a vertical re-skins from config at runtime. Static HTML is ideal for the directory's SEO/AEO crawlability.
+- **Backend:** Supabase (Postgres + PostGIS + Auth + Storage + **Edge Functions** + cron). The static site only reads **golden records** + active offers and calls Edge Functions; all ETL/scraper/affiliate/comms/billing keys stay server-side. Because Pages serves only static files, every dynamic/privileged operation runs in a Supabase Edge Function the site fetches.
 - **The router** (`src/lib/revenue-router/`) is real, unit-tested code with the trust floor enforced as hard constraints.
 
 ---
@@ -45,15 +45,22 @@ Visitor + context ─► RevenueRouter (policy) ─► argmax E[revenue] within 
 config/                 Vertical configs (design tokens, score weights, router policy)
   verticals/gardeners.ts
 src/
+  app/                  Next App Router (static export)
+    layout.tsx          root layout + ThemeProvider
+    page.tsx            home
+    [vertical]/[location]/page.tsx   SSG location page (generateStaticParams)
   lib/revenue-router/   RevenueRouter + trust-floor constraints + tests   ← the core idea
+    fetch-candidates.ts client → router-candidates Edge Function
   components/
     monetisation/       MonetisationSlot, AffiliateUnit, Lead/Subscription units
     directory/          AnswerBlock, BusinessCard, QualityScoreBadge
-  pages/                LocationPage (answer-first + slot demo)
+  views/                LocationPage (answer-first + slot demo)
   theme/                ThemeProvider (applies tokens as CSS vars)
 supabase/
   migrations/           0001 foundation · 0002 ETL · 0003 affiliate+revenue · 0004 CRM · 0005 loop · 0006 RLS
+  functions/            affiliate-redirect · affiliate-postback · router-candidates (Deno Edge Functions)
   seed.sql              gardeners + Manchester + seed affiliate offers
+.github/workflows/      deploy-pages.yml (build static export → GitHub Pages)
 docs/                   Strategy + data-science + loop + affiliate + build plan
 ```
 
@@ -63,10 +70,10 @@ docs/                   Strategy + data-science + loop + affiliate + build plan
 
 ```bash
 npm install
-cp .env.example .env          # fill VITE_SUPABASE_URL + VITE_SUPABASE_ANON_KEY (FE-safe only)
-npm run dev                   # http://localhost:5173  →  /gardeners/manchester
+cp .env.example .env          # fill NEXT_PUBLIC_SUPABASE_URL + ANON_KEY (FE-safe only)
+npm run dev                   # http://localhost:3000  →  /gardeners/manchester
 npm test                      # RevenueRouter trust-floor + EV tests
-npm run typecheck && npm run build
+npm run typecheck && npm run build   # build → static export in out/
 ```
 
 Supabase (local), once the CLI is installed:
@@ -74,10 +81,20 @@ Supabase (local), once the CLI is installed:
 ```bash
 supabase start
 supabase db reset             # applies migrations + seed
+supabase functions serve      # affiliate-redirect, affiliate-postback, router-candidates
 npm run db:types              # regenerate src/lib/database.types.ts
 ```
 
 > Note: the app boots without Supabase configured (for local UI work); data-backed pages require the env vars + a Supabase project.
+
+## Deploy to GitHub Pages
+
+1. Push to `main`. The workflow `.github/workflows/deploy-pages.yml` runs tests, builds the static export, and publishes `out/`.
+2. In repo **Settings → Pages**, set **Source: GitHub Actions**.
+3. Add repo secrets `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` (the anon key is RLS-bounded and safe to ship in a static bundle).
+4. For a **project site** (`https://<user>.github.io/<repo>`) the workflow auto-sets `NEXT_PUBLIC_BASE_PATH=/<repo>`; for a user/org page or custom domain it stays empty.
+
+Privileged work (ETL, affiliate click-resolution, postbacks, candidate-build) runs in Supabase Edge Functions — see `supabase/functions/README.md`.
 
 ---
 

@@ -2,6 +2,8 @@
 
 Revises `Lovable-Prompt-Plan.md`. Keeps all the original prompts (they were good) and **inserts the affiliate rail + RevenueRouter early** so revenue starts in Stage 0. Works for a local repo (this scaffold) or Lovable copy-paste.
 
+> **Hosting model:** the front end is **Next.js statically exported to GitHub Pages** (crawlable static HTML for SEO/AEO). All dynamic/privileged work runs in **Supabase Edge Functions** the static site calls — there is no Node server in production. Keep this split in mind for every prompt: page = static; logic = Edge Function.
+
 > Convention: ✅ = scaffolded in this repo already · ◻ = to build · 🔁 = wired into the CRISP-DM loop.
 > Seed: **gardeners** in one UK metro (e.g. Manchester).
 
@@ -21,7 +23,7 @@ Revises `Lovable-Prompt-Plan.md`. Keeps all the original prompts (they were good
 | **A1** | **Affiliate catalogue + partner/offer/placement admin** | ✅ schema + seed; ◻ admin UI |
 | **A2** | **RevenueRouter + MonetisationSlot + AffiliateUnit (trust floor in code)** | ✅ |
 | **A3** | **Intent classifier (rules v1) → session.intent_*** | ◻ |
-| **A4** | **Attribution spine + `/r/:offerId` click-resolution + postback webhooks + RPM view** | ✅ schema/view; ◻ edge fns |
+| **A4** | **Attribution spine + click-resolution + postback webhooks + candidate-build + RPM view** | ✅ schema/view + Edge Functions (`affiliate-redirect`, `affiliate-postback`, `router-candidates`) |
 | **A5** | **Affiliate compliance (disclosure, rel, consent) — gated in `<MonetisationSlot/>`** | ✅ |
 | 7 | Searcher tools (cost estimator + comparator) with shareable result URLs | ◻ |
 

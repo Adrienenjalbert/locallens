@@ -9,6 +9,13 @@ dist-ssr/
 *.local
 .vite/
 
+# next.js
+.next/
+out/
+next-env.d.ts
+.swc/
+*.tsbuildinfo
+
 # env / secrets — NEVER commit
 .env
 .env.*

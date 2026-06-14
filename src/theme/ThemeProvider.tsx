@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, type ReactNode } from "react";
 import type { ThemeTokens } from "@config/types";
 

@@ -94,6 +94,8 @@ These are **unit-tested** (`router.test.ts`). The loop can only explore inside t
 | RevenueRouter + trust-floor constraints + tests | ✅ `src/lib/revenue-router/` |
 | `<AffiliateUnit/>` + `<MonetisationSlot/>` (labelled, rel-correct, accessible) | ✅ `src/components/monetisation/` |
 | Seed offers (gardeners) | ✅ `supabase/seed.sql` |
-| `/r/:offerId` click-resolution Edge fn + postback webhooks | ◻ specified (needs network credentials) |
-| Candidate-build (relevance + EPC) server function | ◻ specified |
+| Click-resolution Edge fn + postback webhook | ✅ `supabase/functions/affiliate-redirect`, `affiliate-postback` (set network secrets to go live) |
+| Candidate-build (relevance + EPC) Edge fn + client helper | ✅ `supabase/functions/router-candidates` + `src/lib/revenue-router/fetch-candidates.ts` |
 | Affiliate routing CRISP-DM experiments | ◻ wired via `experiment` schema |
+
+> **Static-host note:** the front end is GitHub Pages (no server), so affiliate units link to the `affiliate-redirect` Edge Function rather than a Next route. This is why click-resolution lives in Supabase, not the app.

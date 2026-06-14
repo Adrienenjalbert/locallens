@@ -4,7 +4,7 @@ import type { Config } from "tailwindcss";
 // re-skin the entire app at runtime by swapping the variable values.
 const config: Config = {
   darkMode: ["class"],
-  content: ["./index.html", "./src/**/*.{ts,tsx}"],
+  content: ["./src/**/*.{ts,tsx}", "./config/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
