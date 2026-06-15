@@ -36,7 +36,12 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: Install dependencies
-        run: npm ci
+        # Use `npm install` rather than `npm ci`: a transitive optional
+        # platform binding (@unrs/resolver-binding-wasm32-wasi → @emnapi/*)
+        # resolves to different patch versions across platforms/npm versions,
+        # which makes `npm ci` hard-fail (EUSAGE) on the Linux runner. `npm
+        # install` honours the locked versions but tolerates that drift.
+        run: npm install --no-audit --no-fund
 
       - name: Run tests
         run: npm test
