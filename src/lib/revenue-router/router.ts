@@ -44,7 +44,7 @@ export class RevenueRouter {
       };
     });
 
-    const chosen = this.selectArm(scored);
+    const chosen = this.selectArm(scored, ctx);
 
     return {
       slot: ctx.slot,
@@ -57,12 +57,21 @@ export class RevenueRouter {
   /**
    * v1 arm selection: highest score among allowed candidates. Showing NOTHING
    * is a legitimate, often-correct outcome (no candidate clears the floor, or
-   * all expected values are ~0). Override in v2 for bandit exploration.
+   * all expected values are ~0). The BanditRouter overrides this for
+   * exploration; `ctx` is passed so a contextual policy can pick the right cell.
    */
-  protected selectArm(scored: ScoredCandidate[]): ScoredCandidate | null {
+  protected selectArm(
+    scored: ScoredCandidate[],
+    _ctx: RouterContext,
+  ): ScoredCandidate | null {
     const allowed = scored
       .filter((c) => c.allowed && c.score > 0)
       .sort((a, b) => b.score - a.score);
     return allowed[0] ?? null;
+  }
+
+  /** Candidates allowed by the trust floor with positive score (shared helper). */
+  protected eligible(scored: ScoredCandidate[]): ScoredCandidate[] {
+    return scored.filter((c) => c.allowed && c.score > 0);
   }
 }

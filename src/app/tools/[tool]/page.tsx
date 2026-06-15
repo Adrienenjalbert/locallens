@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { CostEstimatorView } from "@/views/tools/CostEstimatorView";
 import { ComparatorView } from "@/views/tools/ComparatorView";
+import { ReviewEmailSetupView } from "@/views/tools/ReviewEmailSetupView";
 import { VERTICALS } from "@config/index";
 import { buildPriceRangeJsonLd, jsonLdScript } from "@/lib/tools/jsonld";
 import { estimateRange, DEFAULT_SIZE, DEFAULT_SCOPE } from "@/lib/tools/pricing";
@@ -11,7 +12,7 @@ interface RouteParams {
   tool: string;
 }
 
-type ToolKind = "estimator" | "comparator";
+type ToolKind = "estimator" | "comparator" | "review-email-setup";
 
 interface ToolDef {
   kind: ToolKind;
@@ -29,6 +30,11 @@ const TOOLS: Record<string, ToolDef> = {
   },
   "gardeners-vs": {
     kind: "comparator",
+    vertical: "gardeners",
+    location: "manchester",
+  },
+  "review-email-setup": {
+    kind: "review-email-setup",
     vertical: "gardeners",
     location: "manchester",
   },
@@ -56,6 +62,15 @@ export function generateMetadata({ params }: { params: RouteParams }): Metadata 
     return buildPageMetadata({
       title: `${name} cost estimator — ${placeName}`,
       description: `Estimate what a ${name.toLowerCase().replace(/s$/, "")} costs in ${placeName} by garden size and job type, using typical local price bands. Free, no signup.`,
+      path,
+      modifiedTime,
+    });
+  }
+  if (def.kind === "review-email-setup") {
+    return buildPageMetadata({
+      title: "Free review-request email builder",
+      description:
+        "Build a ready-to-send Google review-request email with a clickable 5-star rating in 2 minutes. Happy customers go to Google, unhappy ones to a private form — fully compliant. Free, no signup.",
       path,
       modifiedTime,
     });
@@ -108,6 +123,8 @@ export default function Page({ params }: { params: RouteParams }) {
     }
     case "comparator":
       return <ComparatorView vertical={def.vertical} location={def.location} />;
+    case "review-email-setup":
+      return <ReviewEmailSetupView />;
     default: {
       const _exhaustive: never = def.kind;
       return _exhaustive;

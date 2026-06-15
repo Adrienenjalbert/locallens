@@ -12,8 +12,9 @@ browser bundle).
 | `etl-normalise` | `POST /functions/v1/etl-normalise` | B | Map raw → `etl.staging_business` (UK phone E.164, postcode, taxonomy) with per-field provenance. |
 | `etl-resolve` | `POST /functions/v1/etl-resolve` | C–F | Dedup (fuzzy name + geo + phone/web) → validate (hard/soft rules + `data_confidence`) → load golden `business` + `field_provenance`; low-confidence held. |
 | `etl-score` | `POST /functions/v1/etl-score` | Score | Compute Quality Score (Bayesian) + `score_breakdown` + page-readiness; set status/noindex. |
+| `etl-keywords` | `POST /functions/v1/etl-keywords` | Opportunity | Profit-aware page selection: score `keyword.opportunity_score` (volume × intent × gap × affiliate-RPM × supply) and queue buildable `page` rows. Live-loop counterpart of the `tools/seo/` CLI. |
 
-Run order: `etl-extract → etl-normalise → etl-resolve → etl-score`. Each is idempotent and logs to `pipeline_run`.
+Run order: `etl-extract → etl-normalise → etl-resolve → etl-score → etl-keywords`. Each is idempotent and logs to `pipeline_run`.
 
 ### Affiliate + routing
 
@@ -33,6 +34,7 @@ Run order: `etl-extract → etl-normalise → etl-resolve → etl-score`. Each i
 | `data-verify` | `POST` (scheduled) | Accuracy/freshness/dedup/completeness/provenance checks → `data_check`; can lower confidence + noindex. |
 | `ui-verify` | `POST` (per-deploy + scheduled) | Screenshots × devices + visual-regression diff → `ui_snapshot`; broken = blocks release. |
 | `seed-journeys` | `POST` | Upsert default comm templates + journeys for a business. |
+| `bandit-update` | `POST` (scheduled) | Refresh RevenueRouter bandit posteriors: `router_decision` impressions + matched `conversion` successes → `bump_arm_stat` per (cell × arm). |
 
 ## Local dev
 
@@ -44,7 +46,7 @@ supabase functions serve --no-verify-jwt        # serves all functions locally
 ## Deploy
 
 ```bash
-for fn in etl-extract etl-normalise etl-resolve etl-score \
+for fn in etl-extract etl-normalise etl-resolve etl-score etl-keywords \
           affiliate-redirect affiliate-postback router-candidates; do
   supabase functions deploy "$fn"
 done

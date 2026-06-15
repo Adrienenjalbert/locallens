@@ -55,11 +55,11 @@ Revises `Lovable-Prompt-Plan.md`. Keeps all the original prompts (they were good
 |---|---|---|
 | 18 | Monetisation: Stripe (CRM + Growth) + freemium gates + upgrade nudges + referral | ✅ `stripe-checkout`/`stripe-webhook`, `/pricing`, `config/plans.ts`, `Gate`/`UpgradeNudge`, `useEntitlements` |
 | 19 | Instrumentation + experiments + improvement-agent + `/admin/loop` | ✅ 🔁 `improvement-agent` (HITL for ranking/routing) + `/admin/loop`, `/admin/experiments` |
-| R1 | **Promote RevenueRouter rules → contextual bandit (Thompson)** — swap `selectArm()` only | ◻ 🔁 |
-| 9 | Keyword-driven pSEO scaling (SEMrush/Ahrefs) — profit-aware opportunity | ◻ 🔁 |
-| 10 | Technical SEO/AEO plumbing + freshness | ◻ |
+| R1 | **Promote RevenueRouter rules → contextual bandit (Thompson)** — swap `selectArm()` only | ✅ 🔁 `bandit.ts`/`bandit-router.ts` (tested), `arm_stat` (mig 0007), `bandit-update` fn; activate via `policy_version='bandit-v2'` |
+| 9 | Keyword-driven pSEO scaling (free tools) — profit-aware opportunity | ✅ 🔁 `src/lib/scoring/opportunity.ts` (tested) + `tools/seo/` CLI + `etl-keywords` Edge fn (writes `keyword.opportunity_score`, queues pages); ◻ GSC volume wiring |
+| 10 | Technical SEO/AEO plumbing + freshness | ✅ `robots.ts`, `sitemap.ts`, `src/lib/seo/*`, LocalBusiness/Breadcrumb/ItemList schema (see `docs/06-AEO-SEO-STRATEGY.md`) |
 | 20 | Authenticity & real-image handling | ◻ schema ✅ |
-| 21 | Page-readiness scoring + publish gate (affiliate-aware) | ◻ schema ✅ 🔁 |
+| 21 | Page-readiness scoring + publish gate (affiliate-aware) | ✅ schema + `src/lib/scoring/page-readiness.ts` (tested) 🔁 (also listed in Stage 0) |
 | 22 | Internal prospecting/outreach console (admin GTM, need-score) | ✅ `/admin/prospects` + `tools/outreach` CLI (discover/audit/personalise) |
 | 23 | Constant Data + UI verification (release gates) | ✅ 🔁 `data-verify` + `ui-verify` Edge Functions + `/admin/data`, `/admin/ui` |
 | 11 | New vertical from config (prove the engine) | ◻ |
@@ -81,7 +81,7 @@ Stage 1 (supply)
 
 Stage 2 (loop + scale)
 all surfaces ─► 19 loop ─► R1 bandit
-6 ─► 9 pSEO ─► 10 SEO/AEO ─► 11 new vertical ─► 12 QA
+6 ─► 9 pSEO ✅ ─► 10 SEO/AEO ✅ ─► 11 new vertical ─► 12 QA
 6 ─► 20 authenticity ─► 21 readiness   ;   4,15 ─► 22 prospecting   ;   19 ─► 23 verification
 ```
 

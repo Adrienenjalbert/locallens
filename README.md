@@ -204,6 +204,7 @@ Privileged work (ETL, affiliate click‑resolution, postbacks, candidate‑build
 | [`docs/03-AFFILIATE-ENGINE.md`](docs/03-AFFILIATE-ENGINE.md) | The affiliate rail: schema, safe click/postback path, trust floor, compliance, economics |
 | [`docs/04-BUILD-PROMPT-PLAN.md`](docs/04-BUILD-PROMPT-PLAN.md) | Revenue‑first build sequence (Stage 0/1/2) + dependency graph |
 | [`docs/05-B2B-SIGNAL-OUTREACH-PLAN.md`](docs/05-B2B-SIGNAL-OUTREACH-PLAN.md) | Signal‑based B2B prospecting for the outreach engine |
+| [`docs/06-AEO-SEO-STRATEGY.md`](docs/06-AEO-SEO-STRATEGY.md) | AEO + smart‑SEO strategy (free tools): technical floor, profit‑aware page selection, the `tools/seo/` research engine, and the llms.txt decision |
 | GTM plans | [`docs/01-BUSINESS-PLAN-ITALY-GTM.md`](docs/01-BUSINESS-PLAN-ITALY-GTM.md) · [`docs/02-BUSINESS-PLAN-UK-GTM.md`](docs/02-BUSINESS-PLAN-UK-GTM.md) |
 
 ---

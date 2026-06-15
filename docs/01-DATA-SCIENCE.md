@@ -78,7 +78,11 @@ choose argmax over candidates that clear the TRUST FLOOR (hard mask)
 - `rail_weight` lives in `vertical.router_policy.weights` (loop-tunable).
 - **Trust floor** = hard constraints (`constraints.ts`): ranking integrity, affiliate relevance + disclosure, answer-first, consent, lead-needs-operator. A candidate failing any is masked out. **Showing nothing is a valid output.**
 
-**v2 — contextual bandit (Thompson sampling):** one bandit per `(page_type × intent_stage × geo_tier)` cell; arms = rail/offer choices; reward = realised £ from `conversion`. The trust floor remains a hard mask over arms — exploration only happens *inside* the floor. Swapping `selectArm()` is the only code change; the call site (`MonetisationSlot`) is unchanged.
+**v2 — contextual bandit (Thompson sampling): ✅ implemented (`bandit.ts`, `bandit-router.ts`).** One Beta-Bernoulli posterior per `(page_type × intent_stage × geo_tier)` **cell × arm** (`arm = rail:ref`). To pick: sample `θ ~ Beta(α,β)` per *eligible* arm and rank by `θ × expectedValue` — Thompson sampling for **revenue**, not just conversion rate. The trust floor remains a hard mask: `BanditRouter` overrides only `selectArm()`, which receives only the candidates the base class already cleared — so exploration happens strictly *inside* the floor (proven in `bandit.test.ts`). Cold-start arms use the uniform `Beta(1,1)` prior (pure exploration). The call site (`MonetisationSlot` → `useRouterDecision`) is unchanged.
+
+- **Persistence:** `arm_stat` table (migration `0007`) holds the posteriors (public-read aggregates). `bandit-update` Edge Function bumps `Beta(α,β)` from `router_decision` impressions + matched `conversion` successes via the `bump_arm_stat` RPC.
+- **Activation = config, not code:** set a vertical's `router_policy.policy_version` to `bandit-v2`. `useRouterDecision` then loads the cell's posteriors client-side *after* first paint and switches from the deterministic rules router to the bandit — so SSG/hydration markup is stable (no mismatch) and it degrades to rules on any failure. This honours "promote winners to config" + human-in-the-loop for routing.
+- **Offline eval:** `thompsonSelect(..., "mean")` ranks by posterior-mean × EV with no exploration — used to backtest a policy change before activating it live.
 
 **Every decision logged** to `router_decision` (context + all candidate scores + chosen + policy_version) → this is the bandit's training set and the audit trail.
 
@@ -124,7 +128,7 @@ opportunity = volume × intent_weight × competition_gap        (demand)
 | Page-readiness | thresholds in `page-readiness.ts` | ✅ `src/lib/scoring/page-readiness.ts` (tested) + `etl-score` | `page_readiness` | publish/hold + enrichment queue |
 | Intent | keyword `intent`/`funnel` rules | ◻ rules in `router-candidates` (v1) | `session.intent_*` | stage→outcome |
 | RevenueRouter | `vertical.router_policy` | ✅ `src/lib/revenue-router/` + `useRouterDecision` + `router-candidates` | `router_decision`, `touch`, `conversion` | `revenue_per_session` view (RPM) |
-| Opportunity | thresholds in config | ◻ `etl-keywords` Edge fn (spec) | `keyword.opportunity_score` | indexed→clicks→RPM |
+| Opportunity | thresholds in config | ✅ 🔁 `src/lib/scoring/opportunity.ts` (tested) + `tools/seo/` CLI + `etl-keywords` Edge fn | `keyword.opportunity_score` | indexed→clicks→RPM |
 
 ✅ = implemented in this scaffold. ETL (`etl-extract/normalise/resolve/score`) and affiliate/router Edge Functions are built; they gracefully no-op without live API keys so the pipeline can be exercised locally.
 

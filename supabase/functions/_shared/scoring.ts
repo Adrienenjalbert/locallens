@@ -1,10 +1,13 @@
-// Quality Score + page-readiness — DENO copy for the ETL pipeline.
+// Quality Score + page-readiness + Opportunity model — DENO copy for the ETL
+// pipeline.
 //
-// ⚠️ KEEP IN SYNC with `src/lib/scoring/quality-score.ts` +
-// `src/lib/scoring/page-readiness.ts`. These are pure, dependency-free
-// functions duplicated here because Deno (Edge Functions) and Node (Next front
-// end + Vitest) can't share module-aliased imports cleanly. The Node copy is
-// the unit-tested source of truth; this copy must match its algorithm.
+// ⚠️ KEEP IN SYNC with `src/lib/scoring/quality-score.ts`,
+// `src/lib/scoring/page-readiness.ts` + `src/lib/scoring/opportunity.ts`. These
+// are pure, dependency-free functions duplicated here because Deno (Edge
+// Functions) and Node (Next front end + Vitest) can't share module-aliased
+// imports cleanly. The Node copy is the unit-tested source of truth; this copy
+// must match its algorithm. A keep-in-sync test
+// (`src/lib/scoring/opportunity.sync.test.ts`) asserts the two agree.
 
 export interface ScoreWeights {
   review_quality: number;
@@ -101,4 +104,59 @@ export function computePageReadiness(i: ReadinessInputs) {
   const completenessScore = Math.round(score * 1000) / 1000;
   const threshold = i.affiliateMatch ? 0.4 : 0.55;
   return { completenessScore, missingFields: missing, affiliateMatch: i.affiliateMatch, publishable: completenessScore >= threshold };
+}
+
+// ── Opportunity / Market-Entry model (profit-aware pSEO) ──
+// Mirror of src/lib/scoring/opportunity.ts. opportunity =
+//   volume × intent_weight × competition_gap × affiliate_rpm_potential × supply_readiness
+
+export type IntentStage = "research" | "compare" | "hire-now";
+export type IntentValue = "low" | "medium" | "high";
+
+export interface OpportunityInputs {
+  volume: number;
+  intentStage: IntentStage;
+  intentValue: IntentValue;
+  competitionGap: number;
+  affiliateRpmPotential: number;
+  supplyReadiness: number;
+}
+
+const STAGE_WEIGHT: Record<IntentStage, number> = { research: 0.4, compare: 0.7, "hire-now": 1.0 };
+const VALUE_WEIGHT: Record<IntentValue, number> = { low: 0.4, medium: 0.7, high: 1.0 };
+const MAX_INTENT = STAGE_WEIGHT["hire-now"] * VALUE_WEIGHT.high;
+
+/** Build-queue threshold on the final opportunity score. KEEP IN SYNC. */
+export const BUILD_THRESHOLD = 0.08;
+
+export function normaliseVolume(volume: number): number {
+  if (volume <= 0) return 0;
+  const HALF_SATURATION = 500;
+  return volume / (volume + HALF_SATURATION);
+}
+
+export function intentWeight(stage: IntentStage, value: IntentValue): number {
+  return (STAGE_WEIGHT[stage] * VALUE_WEIGHT[value]) / MAX_INTENT;
+}
+
+export function computeOpportunity(inputs: OpportunityInputs) {
+  const volume = normaliseVolume(inputs.volume);
+  const intent = intentWeight(inputs.intentStage, inputs.intentValue);
+  const competitionGap = clamp01(inputs.competitionGap);
+  const affiliate = clamp01(inputs.affiliateRpmPotential);
+  const supply = clamp01(inputs.supplyReadiness);
+  const score =
+    Math.round(volume * intent * competitionGap * affiliate * supply * 1000) / 1000;
+  return {
+    score,
+    shouldBuild: score >= BUILD_THRESHOLD,
+    breakdown: {
+      volume: { value: inputs.volume, weight: 1, factor: volume },
+      intentStage: { value: STAGE_WEIGHT[inputs.intentStage], weight: 1, factor: intent },
+      intentValue: { value: VALUE_WEIGHT[inputs.intentValue], weight: 1, factor: intent },
+      competitionGap: { value: competitionGap, weight: 1, factor: competitionGap },
+      affiliateRpmPotential: { value: affiliate, weight: 1, factor: affiliate },
+      supplyReadiness: { value: supply, weight: 1, factor: supply },
+    },
+  };
 }
