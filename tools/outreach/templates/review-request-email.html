@@ -49,7 +49,7 @@
   <body style="margin:0; padding:0; background-color:#f4f5f7; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%;">
     <!-- Preheader: the grey preview text shown in the inbox. Hidden in the body. -->
     <div style="display:none; max-height:0; overflow:hidden; opacity:0; mso-hide:all; font-size:1px; line-height:1px; color:#f4f5f7;">
-      Got a moment? Tap a star to tell us how we did — it takes 10 seconds.
+      Got a moment? Tap a star to tell us how we did. It takes 10 seconds.
     </div>
 
     <!-- Full-width wrapper -->
@@ -58,7 +58,7 @@
         <td align="center" style="padding:24px 12px;">
 
           <!-- Card -->
-          <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px; background-color:#ffffff; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(16,24,40,0.08);">
+          <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%; max-width:600px; background-color:#ffffff; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(16,24,40,0.08);">
 
             <!-- Accent bar -->
             <tr>
@@ -134,30 +134,14 @@
               </td>
             </tr>
 
-            <!-- Star caption -->
+            <!-- Star caption. The stars are the SINGLE call to action: we do not
+                 add a second "leave a review" button, because that would link
+                 straight to Google and bypass the sentiment-aware routing. -->
             <tr>
-              <td align="center" style="padding:0 32px 8px 32px;">
+              <td align="center" style="padding:6px 32px 8px 32px;">
                 <p style="margin:0; font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#98a2b3;">
-                  Tap the stars above — it takes about 10 seconds.
+                  Tap a star above. It takes about 10 seconds.
                 </p>
-              </td>
-            </tr>
-
-            <!-- Primary button (for clients that under-render the stars) -->
-            <tr>
-              <td align="center" style="padding:20px 32px 8px 32px;">
-                <!--[if mso]>
-                <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{GOOGLE_REVIEW_URL}}" style="height:48px;v-text-anchor:middle;width:280px;" arcsize="50%" strokecolor="{{BRAND_COLOR}}" fillcolor="{{BRAND_COLOR}}">
-                  <w:anchorlock/>
-                  <center style="color:#ffffff;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">Leave a quick review</center>
-                </v:roundrect>
-                <![endif]-->
-                <!--[if !mso]><!-->
-                <a href="{{GOOGLE_REVIEW_URL}}" target="_blank"
-                   style="display:inline-block; background-color:{{BRAND_COLOR}}; color:#ffffff; font-family:Arial, Helvetica, sans-serif; font-size:16px; font-weight:bold; line-height:48px; text-align:center; text-decoration:none; width:280px; border-radius:999px;">
-                  Leave a quick review
-                </a>
-                <!--<![endif]-->
               </td>
             </tr>
 
@@ -165,7 +149,7 @@
             <tr>
               <td align="center" style="padding:18px 40px 0 40px;">
                 <p style="margin:0; font-family:Arial, Helvetica, sans-serif; font-size:13px; line-height:1.6; color:#98a2b3;">
-                  Not a 5-star job? We&rsquo;d still love to hear it — tap 1&ndash;3 stars to tell us privately what went wrong, and we&rsquo;ll do our best to put it right.
+                  Not a 5-star job? We&rsquo;d still love to hear it. Tap 1 to 3 stars to tell us privately what went wrong, and we&rsquo;ll do our best to put it right.
                 </p>
               </td>
             </tr>
@@ -191,7 +175,7 @@
           <!-- /Card -->
 
           <!-- Footer -->
-          <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px;">
+          <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%; max-width:600px;">
             <tr>
               <td align="center" style="padding:20px 24px;">
                 <p style="margin:0 0 6px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:1.6; color:#98a2b3;">
