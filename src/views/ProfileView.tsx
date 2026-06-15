@@ -55,10 +55,13 @@ export function ProfileView({
   vertical = "gardeners",
   location = "manchester",
   business = "greenthumb-gardens",
+  lastUpdatedLabel,
 }: {
   vertical?: string;
   location?: string;
   business?: string;
+  /** Human "Updated …" label (freshness signal AI engines weight heavily). */
+  lastUpdatedLabel?: string;
 }) {
   const config = getVertical(vertical) ?? gardeners;
   const businessName = titleCaseSlug(business);
@@ -113,6 +116,11 @@ export function ProfileView({
           landscaping and hedge trimming. Ranked honestly by the LocalLens
           Quality Score — never pay-to-rank.
         </p>
+        {lastUpdatedLabel && (
+          <p className="text-xs text-muted-foreground">
+            Updated {lastUpdatedLabel}
+          </p>
+        )}
       </header>
 
       <WhyRankedHere breakdown={breakdown} />

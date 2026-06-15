@@ -2,6 +2,8 @@
 
 > Builds on `CRISP-DM-Improvement-Loop-Playbook.md`. v2 adds a **fifth surface — monetisation routing** — and ties every loop to the **RPM ↔ qualified-actions** honesty constraint and the schema in this repo.
 
+> **Build-status honesty.** This document describes the loop as it is *designed* to run. What exists today: the **attribution spine** (`event_log` / `router_decision` / `touch` / `conversion`), the **config-as-policy** surface (weights/thresholds/journeys live in config, tunable without code), the **rules-mode router + trust floor** (tested), and the **rubrics** in `supabase/functions/_shared/loop-rubrics.ts`. What is **specified but not yet learning from live data** (◻): the offline-backtest harness, the online A/B assignment, and the scheduled **improvement-agent** itself. The loop is an instrumented harness until there is traffic to optimise — it cannot bandit its way out of a cold start. Step one is real high-intent sessions on one page; the optimisation activates from there.
+
 ---
 
 ## The five surfaces (one engine, five loops)
@@ -33,7 +35,9 @@ Business understanding → Data understanding → Data prep → Modelling/Build(
 
 ---
 
-## The improvement-agent (scheduled Edge Function, weekly)
+## The improvement-agent (scheduled Edge Function, weekly) — ◻ specified, activates at volume
+
+> Target behaviour once there is enough traffic to evaluate. Until then it is not scheduled.
 
 ```
 read metrics per surface  →  score vs rubric  →

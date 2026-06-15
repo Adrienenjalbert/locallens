@@ -13,7 +13,19 @@ export type Constraint = (
   policy: RouterPolicy,
 ) => string | null;
 
-/** #1 Ranking integrity: paid/featured units cannot exceed the above-fold cap. */
+/**
+ * #1a Ranking integrity — the honest list is never reordered. A featured/paid
+ * unit may NEVER fill a slot that is part of the Quality-Score-ordered organic
+ * operator list; it can only live in a dedicated, labelled monetisation slot.
+ * This makes "paid placement can't bury the genuinely-best operator" a
+ * structural guarantee, not page-layout convention.
+ */
+const rankingIntegrity: Constraint = (c, ctx) => {
+  if (c.featured && ctx.slotIsOrganicList) return "featured_cannot_reorder_organic";
+  return null;
+};
+
+/** #1b Ranking integrity — paid/featured units cannot exceed the above-fold cap. */
 const featuredCap: Constraint = (c, ctx, policy) => {
   if (!c.featured) return null;
   if (ctx.featuredAboveFoldCount >= policy.trust_floor.max_featured_above_fold) {
@@ -53,6 +65,7 @@ const leadRequiresOperator: Constraint = (c, ctx) => {
 };
 
 export const TRUST_FLOOR: Constraint[] = [
+  rankingIntegrity,
   featuredCap,
   affiliateRelevance,
   answerFirst,

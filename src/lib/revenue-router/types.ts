@@ -20,6 +20,14 @@ export interface RouterContext {
   answerAlreadyRendered: boolean;
   /** How many featured/paid units already rendered above the fold on this page. */
   featuredAboveFoldCount: number;
+  /**
+   * Ranking integrity (trust floor #1): is THIS slot part of the honest,
+   * Quality-Score-ordered organic operator list? Featured/paid units may never
+   * fill an organic-list slot, so they can never reorder the honest ranking.
+   * They are only allowed in dedicated, labelled monetisation slots. Pages set
+   * this true only for slots interleaved with the organic ranking.
+   */
+  slotIsOrganicList: boolean;
 }
 
 /** A monetisation option competing to fill a slot. */

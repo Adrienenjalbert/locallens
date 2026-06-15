@@ -24,6 +24,7 @@ const baseCtx: RouterContext = {
   hasClaimedOperators: true,
   consent: { analytics: true, marketing: true },
   answerAlreadyRendered: true,
+  slotIsOrganicList: false,
   featuredAboveFoldCount: 0,
 };
 
@@ -107,5 +108,43 @@ describe("RevenueRouter expected-value maximisation", () => {
     const d = router.decide({ ...baseCtx, featuredAboveFoldCount: 1 }, [featured]);
     expect(d.chosen).toBeNull();
     expect(d.candidates[0].reason).toBe("featured_cap_reached");
+  });
+});
+
+describe("RevenueRouter ranking integrity (trust floor #1)", () => {
+  const featured: Candidate = {
+    rail: "featured",
+    ref: "biz-1",
+    expectedValue: 50, // high EV — must STILL be rejected inside the organic list
+    relevance: 1,
+    featured: true,
+    label: "Featured: AquaGarden",
+  };
+
+  it("never lets a paid/featured unit fill an organic-list slot (no reorder)", () => {
+    const router = new RevenueRouter(policy);
+    const d = router.decide({ ...baseCtx, slotIsOrganicList: true }, [featured]);
+    expect(d.chosen).toBeNull();
+    expect(d.candidates[0].reason).toBe("featured_cannot_reorder_organic");
+  });
+
+  it("allows a featured unit in a dedicated (non-organic) slot, within the cap", () => {
+    const router = new RevenueRouter(policy);
+    const d = router.decide(
+      { ...baseCtx, slotIsOrganicList: false, featuredAboveFoldCount: 0 },
+      [featured],
+    );
+    expect(d.chosen?.rail).toBe("featured");
+  });
+
+  it("ranking integrity outranks expected value (honest list cannot be bought)", () => {
+    const router = new RevenueRouter(policy);
+    // Even though the featured EV (50) dwarfs the affiliate EV, the featured
+    // unit is masked out of the organic list and the affiliate wins the slot.
+    const d = router.decide({ ...baseCtx, slotIsOrganicList: true }, [
+      featured,
+      affiliate(5, 0.9),
+    ]);
+    expect(d.chosen?.rail).toBe("affiliate");
   });
 });

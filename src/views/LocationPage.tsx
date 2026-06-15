@@ -1,26 +1,18 @@
 "use client";
 
 import { AnswerBlock } from "@/components/directory/AnswerBlock";
-import { BusinessCard, type BusinessCardData } from "@/components/directory/BusinessCard";
+import { BusinessCard } from "@/components/directory/BusinessCard";
 import { MonetisationSlot } from "@/components/monetisation/MonetisationSlot";
 import type { AffiliateUnitData } from "@/components/monetisation/AffiliateUnit";
 import type { Candidate, RouterContext } from "@/lib/revenue-router";
 import { getVertical } from "@config/index";
 import { gardeners } from "@config/verticals/gardeners";
 import { withBasePath } from "@/lib/paths";
+import { SHORTLIST } from "@/lib/directory/shortlist";
 
 function titleCase(slug: string): string {
   return slug.charAt(0).toUpperCase() + slug.slice(1);
 }
-
-// In production these come from golden records + the affiliate catalogue +
-// server-side intent classification. Hard-coded here to demonstrate the
-// answer-first + slot-based monetisation architecture running locally.
-const SHORTLIST: BusinessCardData[] = [
-  { name: "GreenThumb Gardens", qualityScore: 91, rating: 4.9, reviewCount: 412, locationName: "Manchester", topServices: ["lawn-care", "landscaping", "hedge-trimming"], featured: true },
-  { name: "Urban Roots", qualityScore: 84, rating: 4.7, reviewCount: 188, locationName: "Manchester", topServices: ["garden-clearance", "lawn-care"] },
-  { name: "Petal & Spade", qualityScore: 78, rating: 4.8, reviewCount: 96, locationName: "Manchester", topServices: ["landscaping", "tree-surgery"] },
-];
 
 const AFFILIATE_DATA: Record<string, AffiliateUnitData> = {
   "offer-liability": {
@@ -39,9 +31,12 @@ const AFFILIATE_DATA: Record<string, AffiliateUnitData> = {
 export function LocationPage({
   vertical = "gardeners",
   location = "manchester",
+  lastUpdatedLabel,
 }: {
   vertical?: string;
   location?: string;
+  /** Human "Updated …" label (freshness signal AI engines weight heavily). */
+  lastUpdatedLabel?: string;
 }) {
   const config = getVertical(vertical) ?? gardeners;
   const verticalName = config.name.toLowerCase();
@@ -58,6 +53,7 @@ export function LocationPage({
     hasClaimedOperators: true,
     consent: { analytics: true, marketing: true },
     answerAlreadyRendered: true, // we render AnswerBlock first, below
+    slotIsOrganicList: false, // monetisation slots are dedicated, never the organic ranking
     featuredAboveFoldCount: 1, // the featured BusinessCard above
   };
 
@@ -97,6 +93,13 @@ export function LocationPage({
           <BusinessCard key={b.name} data={b} />
         ))}
       </section>
+
+      {lastUpdatedLabel && (
+        <p className="text-xs text-muted-foreground">
+          Updated {lastUpdatedLabel} · rankings refresh as new reviews and
+          verifications arrive.
+        </p>
+      )}
 
       {/* Optimisable slot: the router decides affiliate vs lead vs nothing.
           Renders with static candidates for SSG, then upgrades to live

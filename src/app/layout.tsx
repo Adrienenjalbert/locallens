@@ -3,11 +3,26 @@ import "@/styles/index.css";
 import { ThemeProvider } from "@/theme/ThemeProvider";
 import { AuthProvider } from "@/lib/auth/AuthProvider";
 import { gardeners } from "@config/verticals/gardeners";
+import { siteUrl } from "@/lib/paths";
 
+// metadataBase makes relative canonical/OG URLs resolve to absolute ones and is
+// what lets robots.ts + sitemap.ts emit absolute URLs under static export.
 export const metadata: Metadata = {
-  title: "LocalLens — find the best local businesses",
+  metadataBase: new URL(siteUrl("/")),
+  title: {
+    default: "LocalLens — find the best local businesses",
+    template: "%s | LocalLens",
+  },
   description:
     "Real data, ranked honestly, with tools that answer your real question.",
+  applicationName: "LocalLens",
+  openGraph: {
+    type: "website",
+    siteName: "LocalLens",
+    locale: "en_GB",
+    url: siteUrl("/"),
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({

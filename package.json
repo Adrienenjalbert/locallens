@@ -12,7 +12,8 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"config/**/*.ts\"",
     "db:types": "supabase gen types typescript --local > src/lib/database.types.ts",
     "test": "vitest run",
-    "outreach": "tsx tools/outreach/index.ts"
+    "outreach": "tsx tools/outreach/index.ts",
+    "seo": "tsx tools/seo/index.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.0",

@@ -8,7 +8,9 @@
 
 ## 1. The one-sentence thesis (what changed)
 
-> **LocalLens is a self-improving local-intent engine that monetises a single, defensible data asset three ways off the same session — affiliate commission (instant), CRM subscription (recurring), and qualified lead-gen (high-value) — and treats "which money-maker to surface for this visitor, on this page, right now" as the central decision that a CRISP-DM loop optimises forever.**
+> **LocalLens is a local-intent engine that monetises a single, defensible data asset three ways off the same session — affiliate commission (instant), CRM subscription (recurring), and qualified lead-gen (high-value) — and treats "which money-maker to surface for this visitor, on this page, right now" as the central decision, designed from day one for a CRISP-DM loop to optimise as traffic accrues.**
+
+> **Build-status honesty.** The decision engine (RevenueRouter, rules mode), the trust floor (enforced in code), the scoring, the schema, and the attribution spine are **built and tested**. The *self-improving* part — offline backtest → A/B → promote-to-config, then a contextual bandit — is **designed in and activates at volume**; with zero traffic the loop is an instrumented harness, not yet a learner. This document describes the target engine; see each section's status markers and `01-DATA-SCIENCE.md` §6 for what is ✅ vs ◻.
 
 The original plan had **two** money engines (CRM subscriptions + featured listings) and a thin "referral hook." The fatal gap: a directory's biggest asset — **high-intent organic traffic** — was only monetised when a visitor became a lead for a *claimed* operator. Most early traffic hits unclaimed listings and earns **£0**. 
 
@@ -121,15 +123,18 @@ Stand up event spine, experiments, and the improvement-agent. Promote RevenueRou
 
 ## 6. The trust floor (the guardrail that makes the router safe)
 
-The RevenueRouter optimises `E[revenue]` **subject to** hard constraints, checked in code on every decision:
+The RevenueRouter optimises `E[revenue]` **subject to** hard constraints. They live in two precise places (and the doc is explicit about which, because the guarantee being *structural* is the whole point):
 
-1. **Ranking integrity:** organic operator ordering is *always* by Quality Score. Paid/featured slots are visually distinct, labelled, and capped (e.g. ≤1 above the fold), never reorder the honest list.
-2. **Affiliate relevance + disclosure:** an affiliate unit only renders if `relevance_score ≥ threshold` for the page's intent, is labelled "Ad / Partner," and carries `rel="sponsored nofollow"`. Disclosure copy is mandatory and data-driven (FTC/UK ASA).
-3. **Answer-first floor:** the direct answer/shortlist must occupy the top of the page before any monetisation unit. Monetisation lives in defined slots, never replacing the answer.
-4. **Consent + privacy:** affiliate/analytics behaviour respects consent state (UK GDPR/PECR); router falls back to non-personalised rules without consent.
-5. **No fabrication:** affiliate copy, like all copy, is real/partner-supplied; AI only labels and summarises.
+**Router-enforced** (`src/lib/revenue-router/constraints.ts`, checked on every decision, unit-tested):
+1. **Ranking integrity:** a paid/featured unit can never fill an organic-list slot (so it can never reorder the honest Quality-Score ranking, even at higher EV), and featured units in dedicated slots are capped above the fold (e.g. ≤1).
+2. **Affiliate relevance:** an affiliate candidate is masked unless `relevance ≥ threshold` for the page's intent.
+3. **Answer-first floor:** no monetisation unit is selected before the answer/shortlist has rendered.
+4. **Consent + privacy:** affiliate is masked without marketing consent (UK GDPR/PECR); the router falls back to non-affiliate.
+5. **Operator-backed leads:** the lead rail is masked unless a claimed operator can actually receive the lead.
 
-These are encoded as `RouterConstraint` checks; a decision that violates any is rejected and logged. **The loop can only explore inside the trust floor.** This is what lets us be aggressive on revenue without becoming spam.
+**Render/content-enforced** (`src/components/monetisation/`, applied where the unit is drawn): mandatory disclosure copy ("Ad / Partner — we may earn a commission", FTC/UK ASA), `rel="sponsored nofollow"`, visual separation from organic results, and **no fabrication** — affiliate copy is real/partner-supplied; AI only labels and summarises.
+
+A decision that violates any router constraint is rejected and logged. **The loop can only explore inside the trust floor.** This is what lets us be aggressive on revenue without becoming spam.
 
 ---
 

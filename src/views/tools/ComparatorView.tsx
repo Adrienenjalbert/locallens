@@ -177,6 +177,7 @@ export function ComparatorView({
     hasClaimedOperators: true,
     consent: { analytics: true, marketing: true },
     answerAlreadyRendered: true,
+    slotIsOrganicList: false,
     featuredAboveFoldCount: 0,
   };
 

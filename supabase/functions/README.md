@@ -23,6 +23,17 @@ Run order: `etl-extract → etl-normalise → etl-resolve → etl-score`. Each i
 | `affiliate-postback` | `POST /functions/v1/affiliate-postback/:network` | Verified conversion webhook: match subid → write a normalised `conversion` (GBP), idempotently. |
 | `router-candidates` | `POST /functions/v1/router-candidates` | Build the scored `Candidate[]` (affiliate relevance + EPC, lead, subscription) the front-end RevenueRouter ranks. |
 
+### Monetisation + loop + verification
+
+| Function | Route | Purpose |
+|---|---|---|
+| `stripe-checkout` | `POST /functions/v1/stripe-checkout` | Create a Stripe Checkout session for a paid plan (secret key server-side). |
+| `stripe-webhook` | `POST /functions/v1/stripe-webhook` | Stripe events → upsert `subscription` (plan/status/MRR) for entitlements. |
+| `improvement-agent` | `POST` (weekly cron) | CRISP-DM agent: score each surface vs rubric, auto-promote clear winners to config (decision_log.config_diff), pause losers, write the loop report + per-operator nudges. **Human-in-the-loop** for ranking/routing (proposes, never auto-applies). |
+| `data-verify` | `POST` (scheduled) | Accuracy/freshness/dedup/completeness/provenance checks → `data_check`; can lower confidence + noindex. |
+| `ui-verify` | `POST` (per-deploy + scheduled) | Screenshots × devices + visual-regression diff → `ui_snapshot`; broken = blocks release. |
+| `seed-journeys` | `POST` | Upsert default comm templates + journeys for a business. |
+
 ## Local dev
 
 ```bash

@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Activity, ShieldCheck, Image as ImageIcon, Target } from "lucide-react";
+import { Activity, FlaskConical, ShieldCheck, Image as ImageIcon, Target } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AdminGate } from "./AdminGate";
 
 // Admin control-tower shell. The /admin layout wraps children in this.
 const NAV = [
   { href: "/admin/loop", label: "Loop", icon: Activity },
+  { href: "/admin/experiments", label: "Experiments", icon: FlaskConical },
   { href: "/admin/data", label: "Data checks", icon: ShieldCheck },
   { href: "/admin/ui", label: "UI checks", icon: ImageIcon },
   { href: "/admin/prospects", label: "Prospects", icon: Target },

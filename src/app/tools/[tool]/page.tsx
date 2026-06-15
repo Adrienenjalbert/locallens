@@ -4,6 +4,8 @@ import { ComparatorView } from "@/views/tools/ComparatorView";
 import { VERTICALS } from "@config/index";
 import { buildPriceRangeJsonLd, jsonLdScript } from "@/lib/tools/jsonld";
 import { estimateRange, DEFAULT_SIZE, DEFAULT_SCOPE } from "@/lib/tools/pricing";
+import { buildPageMetadata } from "@/lib/seo/metadata";
+import { findPublishedPage } from "@/lib/seo/pages";
 
 interface RouteParams {
   tool: string;
@@ -43,21 +45,27 @@ function place(slug: string): string {
 
 export function generateMetadata({ params }: { params: RouteParams }): Metadata {
   const def = TOOLS[params.tool];
-  if (!def) return { title: "Tool | LocalLens" };
+  if (!def) return { title: "Tool" };
 
   const name = VERTICALS[def.vertical]?.name ?? def.vertical;
   const placeName = place(def.location);
+  const path = `/tools/${params.tool}/`;
+  const modifiedTime = findPublishedPage(path)?.lastModified;
 
   if (def.kind === "estimator") {
-    return {
-      title: `${name} cost estimator — ${placeName} | LocalLens`,
+    return buildPageMetadata({
+      title: `${name} cost estimator — ${placeName}`,
       description: `Estimate what a ${name.toLowerCase().replace(/s$/, "")} costs in ${placeName} by garden size and job type, using typical local price bands. Free, no signup.`,
-    };
+      path,
+      modifiedTime,
+    });
   }
-  return {
-    title: `Compare ${name.toLowerCase()} in ${placeName} | LocalLens`,
+  return buildPageMetadata({
+    title: `Compare ${name.toLowerCase()} in ${placeName}`,
     description: `Side-by-side comparison of top-rated ${name.toLowerCase()} in ${placeName} across Quality Score, rating, portfolio, response time and price. Free, no signup.`,
-  };
+    path,
+    modifiedTime,
+  });
 }
 
 export default function Page({ params }: { params: RouteParams }) {

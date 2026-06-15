@@ -13,7 +13,7 @@ Revises `Lovable-Prompt-Plan.md`. Keeps all the original prompts (they were good
 
 | Step | What | State |
 |---|---|---|
-| 0 | Project scaffold (Vite+React+TS+Tailwind, config dirs, Supabase wiring) | ✅ |
+| 0 | Project scaffold (Next.js 14 App Router + React + TS + Tailwind, config dirs, Supabase wiring) | ✅ |
 | 1 | Tokenised design system + component library + `/styleguide` | ✅ partial (tokens, ThemeProvider, core components) |
 | 2 | Data model migrations (golden records, ETL, **affiliate/revenue**, CRM, loop, RLS) | ✅ |
 | 3 | ETL extract + normalise (Google Places + Apify) — server-side, idempotent, observable | ✅ `etl-extract`, `etl-normalise` |
@@ -53,14 +53,15 @@ Revises `Lovable-Prompt-Plan.md`. Keeps all the original prompts (they were good
 
 | Step | What | State |
 |---|---|---|
-| 19 | Instrumentation + experiments + improvement-agent + `/admin/loop` | ◻ schema ✅ 🔁 |
+| 18 | Monetisation: Stripe (CRM + Growth) + freemium gates + upgrade nudges + referral | ✅ `stripe-checkout`/`stripe-webhook`, `/pricing`, `config/plans.ts`, `Gate`/`UpgradeNudge`, `useEntitlements` |
+| 19 | Instrumentation + experiments + improvement-agent + `/admin/loop` | ✅ 🔁 `improvement-agent` (HITL for ranking/routing) + `/admin/loop`, `/admin/experiments` |
 | R1 | **Promote RevenueRouter rules → contextual bandit (Thompson)** — swap `selectArm()` only | ◻ 🔁 |
 | 9 | Keyword-driven pSEO scaling (SEMrush/Ahrefs) — profit-aware opportunity | ◻ 🔁 |
 | 10 | Technical SEO/AEO plumbing + freshness | ◻ |
 | 20 | Authenticity & real-image handling | ◻ schema ✅ |
 | 21 | Page-readiness scoring + publish gate (affiliate-aware) | ◻ schema ✅ 🔁 |
-| 22 | Internal prospecting/outreach console (admin GTM, need-score) | ◻ schema ✅ |
-| 23 | Constant Data + UI verification (release gates) | ◻ schema ✅ 🔁 |
+| 22 | Internal prospecting/outreach console (admin GTM, need-score) | ✅ `/admin/prospects` + `tools/outreach` CLI (discover/audit/personalise) |
+| 23 | Constant Data + UI verification (release gates) | ✅ 🔁 `data-verify` + `ui-verify` Edge Functions + `/admin/data`, `/admin/ui` |
 | 11 | New vertical from config (prove the engine) | ◻ |
 | 12 | QA, accessibility & launch checklist | ◻ |
 

@@ -89,7 +89,7 @@ Tools 1–2 are the defensible diagnostics; 3–5 capture commodity volume. All 
 Pillar guides for head terms + `[competitor] alternativa` pages + per-sector hubs linking to all città pages.
 
 ### 5.5 Stack
-Next.js (programmatic SEO + speed; co-founder territory) · Google Places API · Airtable/DB for città×categoria dataset · LLM API (reply tool) · GA4 + Search Console (tool-page→signup as conversion) · Brevo (IT-friendly ESP). Aligns with the existing repo (Vite/React/Supabase/Tailwind); confirm Next.js vs Vite for the public pSEO surface.
+Next.js (programmatic SEO + speed) · Google Places API · Airtable/DB for città×categoria dataset · LLM API (reply tool) · GA4 + Search Console (tool-page→signup as conversion) · Brevo (IT-friendly ESP). Aligns with the existing repo (**Next.js 14 + React + Supabase + Tailwind**, statically exported to GitHub Pages).
 
 ### 5.6 Funnel & targets
 ```

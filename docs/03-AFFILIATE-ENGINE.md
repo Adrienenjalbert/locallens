@@ -53,17 +53,27 @@ session ─< router_decision ─< touch ─< conversion        (unified attribut
 
 ## 4. The trust floor (enforced in code, not policy prose)
 
-Implemented in `src/lib/revenue-router/constraints.ts`. An affiliate unit renders **only** if it clears every constraint:
+Enforced in **two places**, and this doc is precise about which is which:
+
+**Router-level** (`src/lib/revenue-router/constraints.ts`, unit-tested) — a candidate failing any is masked out of the decision:
 
 | # | Constraint | Effect |
 |---|---|---|
-| 1 | Ranking integrity | affiliate/featured never reorder the honest operator list; featured capped above the fold |
-| 2 | Relevance + disclosure | `relevance ≥ vertical.router_policy.trust_floor.affiliate_relevance_min`; disclosure mandatory |
+| 1a | Ranking integrity (no reorder) | a featured/paid unit can never fill an organic-list slot, so it can never reorder the honest operator ranking — even at higher EV |
+| 1b | Ranking integrity (cap) | featured units in dedicated slots are capped above the fold (`max_featured_above_fold`) |
+| 2 | Affiliate relevance | `relevance ≥ vertical.router_policy.trust_floor.affiliate_relevance_min`; below-floor offers are masked |
 | 3 | Answer-first | no unit before the answer/shortlist renders |
-| 4 | Consent | affiliate only with marketing consent (PECR/GDPR); else router falls back to non-affiliate |
-| 5 | rel attribute | `rel="sponsored nofollow"` always (Google paid-link policy) |
+| 4 | Consent | affiliate only with marketing consent (PECR/GDPR); else the router falls back to non-affiliate |
 
-These are **unit-tested** (`router.test.ts`). The loop can only explore inside the floor.
+**Render-level** (`src/components/monetisation/AffiliateUnit.tsx`) — presentation guarantees applied where the unit is drawn:
+
+| Guarantee | Effect |
+|---|---|
+| Disclosure | mandatory "Partner offer / we may earn a commission" copy when `disclosureRequired` |
+| rel attribute | `rel="sponsored nofollow"` always (Google paid-link policy) |
+| Editorial separation | visually distinct, labelled, never styled as an organic listing |
+
+The router constraints are **unit-tested** (`router.test.ts`), including a test that a high-EV featured unit is still masked out of the organic list. The loop can only explore inside the floor.
 
 ---
 

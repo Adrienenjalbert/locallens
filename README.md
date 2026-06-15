@@ -2,7 +2,7 @@
 
 # 🔎 LocalLens
 
-### A config‑driven local‑intent engine that monetises one data asset three ways — optimised by a self‑improving loop.
+### A config‑driven local‑intent engine that monetises one data asset three ways — built for a CRISP‑DM optimisation loop that activates at volume.
 
 **Affiliate** (instant) · **CRM subscriptions** (recurring) · **Lead‑gen** (high‑value) — all decided live by a **RevenueRouter** that runs inside a hard, code‑enforced **trust floor**.
 
@@ -43,7 +43,7 @@ One codebase serves **any vertical** (trades, health, hospitality, services) by 
 | 🎯 **One asset, three rails** | The same high‑intent session is monetised via affiliate, subscription, and lead‑gen — whichever maximises expected value. |
 | 🧭 **RevenueRouter** | Real, unit‑tested code (`src/lib/revenue-router/`) that picks `argmax E[revenue]` per slot, every render. |
 | 🛡️ **Trust floor** | Five hard constraints (`constraints.ts`) the router *cannot* violate — answer‑first, ranking integrity, relevance, consent, operator‑backed leads. |
-| 🔁 **CRISP‑DM loop** | Outcomes flow into an attribution spine; the loop reads them and re‑tunes config so the engine improves itself. |
+| 🔁 **CRISP‑DM loop (instrumented)** | Every decision + outcome is logged to an attribution spine in the shape the loop needs. The optimisation step (offline backtest → A/B → promote‑to‑config, then a contextual bandit) is **designed in and activates once there's traffic** — it is not yet learning from live data. |
 | ⭐ **Quality Score** | Transparent, weighted scoring (`src/lib/scoring/`) that keeps the honest ranking honest. |
 | 🎨 **Config‑driven verticals** | CSS‑variable design tokens + score weights + router policy live in `config/verticals/*` — re‑skin and re‑tune without touching components. |
 | 🧰 **Owner CRM workspace** | Leads → quotes → jobs → invoices lifecycle for claimed operators (`src/app/app/*`). |
@@ -60,7 +60,7 @@ Visitor + context ─► RevenueRouter (policy) ─► argmax E[revenue]  WITHIN
                           ▼
         event_log · router_decision · touch · conversion   ← unified attribution spine
                           ▼
-        CRISP‑DM loop reads outcomes ─► updates config ─► the engine improves itself
+        CRISP‑DM loop (at volume): reads outcomes ─► backtest/A‑B ─► promotes winners to config
 ```
 
 - **Front end** — Next.js (App Router) + TypeScript + Tailwind, **statically exported** (`output: 'export'`) and hosted on **GitHub Pages**. CSS‑variable design tokens let a vertical re‑skin from config at runtime, and static HTML is ideal for SEO/AEO crawlability.
@@ -148,17 +148,22 @@ npm run outreach              # discovers + audits + ranks prospects → tools/o
 
 ## 🛡️ The trust floor — why this is honest *and* a moat
 
-The RevenueRouter may **only** choose candidates that clear hard, code‑enforced constraints in [`src/lib/revenue-router/constraints.ts`](src/lib/revenue-router/constraints.ts) (all unit‑tested):
+The trust floor is enforced in **two precise places**, and the README is explicit about which is which (the whole pitch is that these guarantees are *structural*):
 
-| # | Constraint | Guarantee |
+**A. Router‑level constraints** ([`src/lib/revenue-router/constraints.ts`](src/lib/revenue-router/constraints.ts), all unit‑tested) — a candidate that fails *any* is masked out of the decision:
+
+| # | Constraint | Guarantee (enforced in the router) |
 |---|---|---|
-| 1 | **Ranking integrity** | Paid/featured units never reorder the honest Quality‑Score list and are capped above the fold. |
-| 2 | **Affiliate relevance + disclosure** | Below‑relevance offers never render; disclosure + `rel="sponsored nofollow"` is mandatory. |
+| 1a | **Ranking integrity — no reorder** | A paid/featured unit can never fill an organic‑list slot, so it can never reorder the honest Quality‑Score ranking — even when its expected value is far higher. |
+| 1b | **Ranking integrity — above‑fold cap** | Featured units in dedicated slots are capped above the fold (`max_featured_above_fold`). |
+| 2 | **Affiliate relevance** | An affiliate offer below the per‑vertical relevance floor never renders. |
 | 3 | **Answer‑first** | The direct answer/shortlist always precedes any monetisation unit. |
 | 4 | **Consent** | Affiliate fires only with marketing consent (PECR / UK GDPR). |
 | 5 | **Operator‑backed leads** | The lead rail only fires when a claimed operator can actually receive it. |
 
-Revenue is optimised **within** a fixed user‑value floor. If no candidate clears the floor, the honest outcome — showing **nothing** — is a first‑class result.
+**B. Render‑level guarantees** ([`src/components/monetisation/`](src/components/monetisation/)) — enforced where the unit is drawn, because they are presentation concerns: every affiliate unit is **labelled "Partner offer"**, visually distinct from organic results, carries `rel="sponsored nofollow"`, and shows mandatory disclosure copy when `disclosureRequired` is set.
+
+Revenue is optimised **within** this fixed user‑value floor. If no candidate clears the floor, the honest outcome — showing **nothing** — is a first‑class result.
 
 ---
 
@@ -170,8 +175,9 @@ npm test
 
 | Suite | Covers |
 |---|---|
-| `src/lib/revenue-router/router.test.ts` | EV ranking, arm selection, every trust‑floor constraint |
+| `src/lib/revenue-router/router.test.ts` | EV ranking, arm selection, every trust‑floor constraint, and ranking‑integrity (a high‑EV featured unit is still masked out of the organic list) |
 | `src/lib/scoring/quality-score.test.ts` | Weighted scoring, normalisation, edge cases |
+| `src/lib/tools/jsonld.test.ts` | Tool JSON‑LD / structured‑data output |
 
 The build itself (`npm run build`) also runs `next lint` + full type‑checking and prerenders every route, so a green build is a strong correctness signal.
 

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  REVIEW REQUEST EMAIL  ·  "How did we do?"  ·  universal, copy-paste, free
+  ============================================================================
+  A beautiful, mobile-first review-request email with a clickable 5-star rating.
+
+  WHY NO JAVASCRIPT: email clients (Gmail, Outlook, Apple Mail) strip <script>
+  and most <style>. So the stars are plain <a> links and all styling is INLINE.
+  This renders the same everywhere.
+
+  HOW THE ROUTING WORKS (compliant — safe to give away):
+    • EVERY star ultimately lets the customer post on Google — you never
+      "gate" or suppress reviews (review gating breaks Google + FTC rules and
+      can get reviews removed).
+    • 4★ and 5★  → go straight to your Google review link (happy → public).
+    • 1★, 2★, 3★ → open YOUR private feedback form FIRST (so you hear about a
+      problem and can fix it), and that form should still offer a Google link
+      at the end. The rating is passed as ?rating=N so the form can pre-fill.
+
+  PLACEHOLDERS TO REPLACE (find/replace all):
+    {{BUSINESS_NAME}}      e.g. Thorburn Landscape
+    {{CUSTOMER_NAME}}      e.g. Sarah   (or remove the line for a generic send)
+    {{GOOGLE_REVIEW_URL}}  your Google "write a review" link
+                           (Google Business Profile → Ask for reviews → copy link,
+                            looks like https://g.page/r/XXXXXXXX/review)
+    {{FEEDBACK_FORM_URL}}  your private form (Google Form, Typeform, your site…)
+                           It will be called as {{FEEDBACK_FORM_URL}}?rating=N
+    {{LOGO_URL}}           optional hosted logo image (or delete the <img> line)
+    {{BRAND_COLOR}}        a hex colour, e.g. #2e7d4f  (used for buttons/accents)
+    {{SIGNOFF_NAME}}       e.g. The Thorburn Landscape team
+    {{UNSUBSCRIBE_URL}}    required by law for marketing email
+  ============================================================================
+-->
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="color-scheme" content="light dark" />
+    <title>How did we do?</title>
+    <!--[if mso]>
+      <style type="text/css">
+        body, table, td, a { font-family: Arial, Helvetica, sans-serif !important; }
+      </style>
+    <![endif]-->
+  </head>
+
+  <body style="margin:0; padding:0; background-color:#f4f5f7; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%;">
+    <!-- Preheader: the grey preview text shown in the inbox. Hidden in the body. -->
+    <div style="display:none; max-height:0; overflow:hidden; opacity:0; mso-hide:all; font-size:1px; line-height:1px; color:#f4f5f7;">
+      Got a moment? Tap a star to tell us how we did — it takes 10 seconds.
+    </div>
+
+    <!-- Full-width wrapper -->
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f4f5f7;">
+      <tr>
+        <td align="center" style="padding:24px 12px;">
+
+          <!-- Card -->
+          <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px; background-color:#ffffff; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(16,24,40,0.08);">
+
+            <!-- Accent bar -->
+            <tr>
+              <td style="height:6px; background-color:{{BRAND_COLOR}}; line-height:6px; font-size:6px;">&nbsp;</td>
+            </tr>
+
+            <!-- Logo / business name -->
+            <tr>
+              <td align="center" style="padding:32px 32px 8px 32px;">
+                <img src="{{LOGO_URL}}" alt="{{BUSINESS_NAME}}" width="120" style="display:block; border:0; max-width:120px; height:auto; margin:0 auto;" />
+                <!-- If you have no logo, delete the <img> above; the name below still shows. -->
+                <div style="margin-top:12px; font-family:Arial, Helvetica, sans-serif; font-size:14px; font-weight:600; letter-spacing:0.3px; color:#667085; text-transform:uppercase;">
+                  {{BUSINESS_NAME}}
+                </div>
+              </td>
+            </tr>
+
+            <!-- Headline -->
+            <tr>
+              <td align="center" style="padding:8px 32px 0 32px;">
+                <h1 style="margin:0; font-family:Georgia, 'Times New Roman', serif; font-size:28px; line-height:1.25; color:#101828; font-weight:700;">
+                  How did we do, {{CUSTOMER_NAME}}?
+                </h1>
+              </td>
+            </tr>
+
+            <!-- Sub copy -->
+            <tr>
+              <td align="center" style="padding:14px 40px 0 40px;">
+                <p style="margin:0; font-family:Arial, Helvetica, sans-serif; font-size:16px; line-height:1.6; color:#475467;">
+                  Thanks for choosing {{BUSINESS_NAME}}. Your feedback genuinely helps us — and other locals looking for someone they can trust. Tap a star to let us know how we did:
+                </p>
+              </td>
+            </tr>
+
+            <!-- ⭐ Clickable star rating ⭐ -->
+            <!--
+              Each star is a link. 4★/5★ go to Google. 1–3★ go to your private
+              form first (with ?rating=N). The star glyph is text so it always
+              renders; the gold colour comes from inline style.
+            -->
+            <tr>
+              <td align="center" style="padding:28px 16px 8px 16px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <td style="padding:0 4px;">
+                      <a href="{{FEEDBACK_FORM_URL}}?rating=1" target="_blank"
+                         style="text-decoration:none; font-size:44px; line-height:44px; color:#f5b50a; font-family:Arial, sans-serif;"
+                         aria-label="1 star">&#9733;</a>
+                    </td>
+                    <td style="padding:0 4px;">
+                      <a href="{{FEEDBACK_FORM_URL}}?rating=2" target="_blank"
+                         style="text-decoration:none; font-size:44px; line-height:44px; color:#f5b50a; font-family:Arial, sans-serif;"
+                         aria-label="2 stars">&#9733;</a>
+                    </td>
+                    <td style="padding:0 4px;">
+                      <a href="{{FEEDBACK_FORM_URL}}?rating=3" target="_blank"
+                         style="text-decoration:none; font-size:44px; line-height:44px; color:#f5b50a; font-family:Arial, sans-serif;"
+                         aria-label="3 stars">&#9733;</a>
+                    </td>
+                    <td style="padding:0 4px;">
+                      <a href="{{GOOGLE_REVIEW_URL}}" target="_blank"
+                         style="text-decoration:none; font-size:44px; line-height:44px; color:#f5b50a; font-family:Arial, sans-serif;"
+                         aria-label="4 stars">&#9733;</a>
+                    </td>
+                    <td style="padding:0 4px;">
+                      <a href="{{GOOGLE_REVIEW_URL}}" target="_blank"
+                         style="text-decoration:none; font-size:44px; line-height:44px; color:#f5b50a; font-family:Arial, sans-serif;"
+                         aria-label="5 stars">&#9733;</a>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Star caption -->
+            <tr>
+              <td align="center" style="padding:0 32px 8px 32px;">
+                <p style="margin:0; font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#98a2b3;">
+                  Tap the stars above — it takes about 10 seconds.
+                </p>
+              </td>
+            </tr>
+
+            <!-- Primary button (for clients that under-render the stars) -->
+            <tr>
+              <td align="center" style="padding:20px 32px 8px 32px;">
+                <!--[if mso]>
+                <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{GOOGLE_REVIEW_URL}}" style="height:48px;v-text-anchor:middle;width:280px;" arcsize="50%" strokecolor="{{BRAND_COLOR}}" fillcolor="{{BRAND_COLOR}}">
+                  <w:anchorlock/>
+                  <center style="color:#ffffff;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">Leave a quick review</center>
+                </v:roundrect>
+                <![endif]-->
+                <!--[if !mso]><!-->
+                <a href="{{GOOGLE_REVIEW_URL}}" target="_blank"
+                   style="display:inline-block; background-color:{{BRAND_COLOR}}; color:#ffffff; font-family:Arial, Helvetica, sans-serif; font-size:16px; font-weight:bold; line-height:48px; text-align:center; text-decoration:none; width:280px; border-radius:999px;">
+                  Leave a quick review
+                </a>
+                <!--<![endif]-->
+              </td>
+            </tr>
+
+            <!-- Reassurance / honesty line -->
+            <tr>
+              <td align="center" style="padding:18px 40px 0 40px;">
+                <p style="margin:0; font-family:Arial, Helvetica, sans-serif; font-size:13px; line-height:1.6; color:#98a2b3;">
+                  Not a 5-star job? We&rsquo;d still love to hear it — tap 1&ndash;3 stars to tell us privately what went wrong, and we&rsquo;ll do our best to put it right.
+                </p>
+              </td>
+            </tr>
+
+            <!-- Divider -->
+            <tr>
+              <td style="padding:28px 32px 0 32px;">
+                <div style="border-top:1px solid #eaecf0; line-height:1px; font-size:1px;">&nbsp;</div>
+              </td>
+            </tr>
+
+            <!-- Sign-off -->
+            <tr>
+              <td style="padding:20px 32px 8px 32px;">
+                <p style="margin:0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:1.6; color:#475467;">
+                  Thank you,<br />
+                  <strong style="color:#101828;">{{SIGNOFF_NAME}}</strong>
+                </p>
+              </td>
+            </tr>
+
+          </table>
+          <!-- /Card -->
+
+          <!-- Footer -->
+          <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px;">
+            <tr>
+              <td align="center" style="padding:20px 24px;">
+                <p style="margin:0 0 6px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:1.6; color:#98a2b3;">
+                  You received this email because you were a customer of {{BUSINESS_NAME}}.
+                </p>
+                <p style="margin:0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:1.6; color:#98a2b3;">
+                  <a href="{{UNSUBSCRIBE_URL}}" style="color:#98a2b3; text-decoration:underline;">Unsubscribe</a>
+                </p>
+              </td>
+            </tr>
+          </table>
+
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
