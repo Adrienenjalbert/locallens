@@ -18,12 +18,10 @@ export function AdminGate({ children }: { children: React.ReactNode }) {
   if (!isAdmin(user)) {
     return (
       <div className="mx-auto max-w-md p-8 text-center">
-        <h1 className="font-display text-xl font-semibold text-foreground">
-          Admin only
-        </h1>
+        <h1 className="font-display text-xl font-semibold text-foreground">Admin only</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          This area is restricted. Data is protected by row-level security
-          regardless of this screen.
+          This area is restricted. Data is protected by row-level security regardless of
+          this screen.
         </p>
       </div>
     );

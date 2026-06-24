@@ -80,7 +80,10 @@ describe("computeOpportunity", () => {
 
   it("rewards a thin-supply page when affiliate potential is high (cold-start unlock)", () => {
     const thinSupply = inputs({ supplyReadiness: 0.3, affiliateRpmPotential: 0.9 });
-    const thinSupplyNoAffiliate = inputs({ supplyReadiness: 0.3, affiliateRpmPotential: 0.05 });
+    const thinSupplyNoAffiliate = inputs({
+      supplyReadiness: 0.3,
+      affiliateRpmPotential: 0.05,
+    });
     expect(computeOpportunity(thinSupply).score).toBeGreaterThan(
       computeOpportunity(thinSupplyNoAffiliate).score,
     );

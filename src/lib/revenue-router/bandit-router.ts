@@ -48,5 +48,9 @@ export function makeBanditRouter(
   stats: ArmStats,
   seed?: number,
 ): BanditRouter {
-  return new BanditRouter(policy, stats, seed === undefined ? Math.random : seededRng(seed));
+  return new BanditRouter(
+    policy,
+    stats,
+    seed === undefined ? Math.random : seededRng(seed),
+  );
 }

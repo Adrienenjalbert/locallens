@@ -1,13 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useId, useMemo, useState } from "react";
-import {
-  Badge,
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-} from "@/components/ui/primitives";
+import { Badge, Button, Card, CardBody, CardHeader } from "@/components/ui/primitives";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
 import type { CommChannel } from "@/lib/crm/types";
@@ -52,8 +46,7 @@ const DEFAULT_JOURNEYS: JourneyDef[] = [
         delay_min: 0,
         channel: "email",
         subject: "Thanks for your enquiry — {{business_name}}",
-        body:
-          "Hi {{customer_name}},\n\nThanks for getting in touch with {{business_name}}. We've received your enquiry and will be back to you very shortly with the next steps.\n\nIf it's urgent, just reply to this message and we'll prioritise it.\n\n— The team at {{business_name}}",
+        body: "Hi {{customer_name}},\n\nThanks for getting in touch with {{business_name}}. We've received your enquiry and will be back to you very shortly with the next steps.\n\nIf it's urgent, just reply to this message and we'll prioritise it.\n\n— The team at {{business_name}}",
       },
     ],
   },
@@ -68,14 +61,12 @@ const DEFAULT_JOURNEYS: JourneyDef[] = [
         delay_min: 2 * DAY,
         channel: "email",
         subject: "Did you get our quote, {{customer_name}}?",
-        body:
-          "Hi {{customer_name}},\n\nJust checking you received the quote we sent. You can view it any time here: {{quote_url}}\n\nHappy to tweak anything or answer questions — just reply.\n\n— {{business_name}}",
+        body: "Hi {{customer_name}},\n\nJust checking you received the quote we sent. You can view it any time here: {{quote_url}}\n\nHappy to tweak anything or answer questions — just reply.\n\n— {{business_name}}",
       },
       {
         delay_min: 5 * DAY,
         channel: "sms",
-        body:
-          "Hi {{customer_name}}, it's {{business_name}}. Still keen to help with your job — your quote is here: {{quote_url}}. Want to go ahead?",
+        body: "Hi {{customer_name}}, it's {{business_name}}. Still keen to help with your job — your quote is here: {{quote_url}}. Want to go ahead?",
       },
     ],
   },
@@ -90,8 +81,7 @@ const DEFAULT_JOURNEYS: JourneyDef[] = [
         delay_min: 0,
         channel: "email",
         subject: "You're booked in — {{job_title}}",
-        body:
-          "Hi {{customer_name}},\n\nGreat news — your job \"{{job_title}}\" is confirmed for {{job_date}}.\n\nWe'll send a reminder the day before. Need to change anything? Just reply.\n\n— {{business_name}}",
+        body: 'Hi {{customer_name}},\n\nGreat news — your job "{{job_title}}" is confirmed for {{job_date}}.\n\nWe\'ll send a reminder the day before. Need to change anything? Just reply.\n\n— {{business_name}}',
       },
     ],
   },
@@ -104,8 +94,7 @@ const DEFAULT_JOURNEYS: JourneyDef[] = [
       {
         delay_min: 0,
         channel: "sms",
-        body:
-          "Reminder from {{business_name}}: we're scheduled for \"{{job_title}}\" tomorrow ({{job_date}}). Reply here if anything's changed. See you then!",
+        body: "Reminder from {{business_name}}: we're scheduled for \"{{job_title}}\" tomorrow ({{job_date}}). Reply here if anything's changed. See you then!",
       },
     ],
   },
@@ -120,15 +109,13 @@ const DEFAULT_JOURNEYS: JourneyDef[] = [
         delay_min: 0,
         channel: "email",
         subject: "Thank you from {{business_name}}",
-        body:
-          "Hi {{customer_name}},\n\nThanks for choosing {{business_name}} — it was a pleasure working with you on \"{{job_title}}\".\n\nYour invoice is ready here: {{invoice_url}} (total {{invoice_total}}).\n\n— {{business_name}}",
+        body: 'Hi {{customer_name}},\n\nThanks for choosing {{business_name}} — it was a pleasure working with you on "{{job_title}}".\n\nYour invoice is ready here: {{invoice_url}} (total {{invoice_total}}).\n\n— {{business_name}}',
       },
       {
         delay_min: 2 * HOUR,
         channel: "email",
         subject: "Mind leaving us a quick review?",
-        body:
-          "Hi {{customer_name}},\n\nIf you were happy with the work, a short review would mean a lot — it helps other locals find us and keeps our profile ranking well.\n\nLeave a review here: {{profile_url}}\n\nThank you!\n— {{business_name}}",
+        body: "Hi {{customer_name}},\n\nIf you were happy with the work, a short review would mean a lot — it helps other locals find us and keeps our profile ranking well.\n\nLeave a review here: {{profile_url}}\n\nThank you!\n— {{business_name}}",
       },
     ],
   },
@@ -142,21 +129,18 @@ const DEFAULT_JOURNEYS: JourneyDef[] = [
         delay_min: 3 * DAY,
         channel: "email",
         subject: "A quick reminder about your invoice",
-        body:
-          "Hi {{customer_name}},\n\nJust a friendly nudge that your invoice (total {{invoice_total}}) is now due. You can pay securely here: {{invoice_url}}\n\nIf you've already paid, please ignore this.\n\n— {{business_name}}",
+        body: "Hi {{customer_name}},\n\nJust a friendly nudge that your invoice (total {{invoice_total}}) is now due. You can pay securely here: {{invoice_url}}\n\nIf you've already paid, please ignore this.\n\n— {{business_name}}",
       },
       {
         delay_min: 7 * DAY,
         channel: "email",
         subject: "Invoice still outstanding — {{business_name}}",
-        body:
-          "Hi {{customer_name}},\n\nYour invoice for {{invoice_total}} is still showing as unpaid. Pay here when you get a moment: {{invoice_url}}\n\nAny issues with payment, just reply and we'll sort it.\n\n— {{business_name}}",
+        body: "Hi {{customer_name}},\n\nYour invoice for {{invoice_total}} is still showing as unpaid. Pay here when you get a moment: {{invoice_url}}\n\nAny issues with payment, just reply and we'll sort it.\n\n— {{business_name}}",
       },
       {
         delay_min: 14 * DAY,
         channel: "sms",
-        body:
-          "Hi {{customer_name}}, {{business_name}} here. Your invoice ({{invoice_total}}) is now 14 days overdue. Please settle it here: {{invoice_url}}. Thanks.",
+        body: "Hi {{customer_name}}, {{business_name}} here. Your invoice ({{invoice_total}}) is now 14 days overdue. Please settle it here: {{invoice_url}}. Thanks.",
       },
     ],
   },
@@ -171,8 +155,7 @@ const DEFAULT_JOURNEYS: JourneyDef[] = [
         delay_min: 0,
         channel: "email",
         subject: "We'd love to see you again, {{customer_name}}",
-        body:
-          "Hi {{customer_name}},\n\nIt's been a while! If anything needs doing, we'd be glad to help again. Reply to this message or view our services here: {{profile_url}}\n\n— {{business_name}}",
+        body: "Hi {{customer_name}},\n\nIt's been a while! If anything needs doing, we'd be glad to help again. Reply to this message or view our services here: {{profile_url}}\n\n— {{business_name}}",
       },
     ],
   },
@@ -192,7 +175,10 @@ const PREVIEW_VARS: Record<string, string> = {
 };
 
 function renderPreview(text: string): string {
-  return text.replace(/\{\{\s*([a-z_]+)\s*\}\}/g, (_m, key: string) => PREVIEW_VARS[key] ?? "");
+  return text.replace(
+    /\{\{\s*([a-z_]+)\s*\}\}/g,
+    (_m, key: string) => PREVIEW_VARS[key] ?? "",
+  );
 }
 
 function formatDelay(min: number): string {
@@ -317,7 +303,10 @@ export default function SettingsPage() {
             .single();
           if (error) throw error;
           if (data?.id) {
-            setState((prev) => ({ ...prev, [trigger]: { ...prev[trigger], rowId: data.id } }));
+            setState((prev) => ({
+              ...prev,
+              [trigger]: { ...prev[trigger], rowId: data.id },
+            }));
           }
         }
         setStatus(trigger, "saved");
@@ -346,7 +335,9 @@ export default function SettingsPage() {
     (trigger: string, stepIndex: number, field: "subject" | "body", value: string) => {
       setState((prev) => {
         const current = prev[trigger];
-        const steps = current.steps.map((s, i) => (i === stepIndex ? { ...s, [field]: value } : s));
+        const steps = current.steps.map((s, i) =>
+          i === stepIndex ? { ...s, [field]: value } : s,
+        );
         return { ...prev, [trigger]: { ...current, steps } };
       });
     },
@@ -373,16 +364,18 @@ export default function SettingsPage() {
           Automated messages
         </h1>
         <p className="mt-1 text-muted-foreground">
-          Pre-built journeys keep customers in the loop automatically — instant
-          replies, follow-ups, reminders and review requests. Turn the ones you
-          want on, and tweak the wording to sound like you.
+          Pre-built journeys keep customers in the loop automatically — instant replies,
+          follow-ups, reminders and review requests. Turn the ones you want on, and tweak
+          the wording to sound like you.
         </p>
         <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
           <Badge tone="primary">{enabledCount} active</Badge>
           {!persistent && (
             <Badge tone="warning">Preview mode — changes won&apos;t be saved</Badge>
           )}
-          {loading && <span className="text-muted-foreground">Loading your settings…</span>}
+          {loading && (
+            <span className="text-muted-foreground">Loading your settings…</span>
+          )}
         </div>
       </header>
 
@@ -460,10 +453,18 @@ function JourneyCard({
       </CardHeader>
       <CardBody className="space-y-3">
         <div className="flex flex-wrap items-center gap-2">
-          <Button variant="ghost" size="sm" onClick={onExpand} aria-expanded={isOpen} aria-controls={panelId}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onExpand}
+            aria-expanded={isOpen}
+            aria-controls={panelId}
+          >
             {isOpen ? "Hide wording" : "Edit wording"}
           </Button>
-          {status === "saving" && <span className="text-xs text-muted-foreground">Saving…</span>}
+          {status === "saving" && (
+            <span className="text-xs text-muted-foreground">Saving…</span>
+          )}
           {status === "saved" && <span className="text-xs text-success">Saved</span>}
           {status === "error" && (
             <span className="text-xs text-danger">Couldn&apos;t save — try again</span>
@@ -519,7 +520,10 @@ function StepEditor({
 
       {step.channel === "email" && (
         <div className="mb-2">
-          <label htmlFor={subjectId} className="mb-1 block text-xs font-medium text-foreground">
+          <label
+            htmlFor={subjectId}
+            className="mb-1 block text-xs font-medium text-foreground"
+          >
             Subject
           </label>
           <input
@@ -532,7 +536,10 @@ function StepEditor({
       )}
 
       <div>
-        <label htmlFor={bodyId} className="mb-1 block text-xs font-medium text-foreground">
+        <label
+          htmlFor={bodyId}
+          className="mb-1 block text-xs font-medium text-foreground"
+        >
           Message
         </label>
         <textarea
@@ -548,7 +555,10 @@ function StepEditor({
         </p>
       </div>
 
-      <Preview subject={step.channel === "email" ? step.subject : undefined} body={step.body} />
+      <Preview
+        subject={step.channel === "email" ? step.subject : undefined}
+        body={step.body}
+      />
     </div>
   );
 }
@@ -562,7 +572,9 @@ function Preview({ subject, body }: { subject?: string; body: string }) {
       {subject !== undefined && (
         <p className="text-sm font-medium text-foreground">{renderPreview(subject)}</p>
       )}
-      <p className="whitespace-pre-line text-sm text-muted-foreground">{renderPreview(body)}</p>
+      <p className="whitespace-pre-line text-sm text-muted-foreground">
+        {renderPreview(body)}
+      </p>
     </div>
   );
 }

@@ -74,7 +74,12 @@ describe("computeQualityScore", () => {
   it("an unclaimed, sparse business scores lower and is not top rated", () => {
     const weak = computeQualityScore(
       signals({
-        review: { rating: 3.8, reviewCount: 4, daysSinceLatest: 400, crossSourceConsistency: 0.5 },
+        review: {
+          rating: 3.8,
+          reviewCount: 4,
+          daysSinceLatest: 400,
+          crossSourceConsistency: 0.5,
+        },
         portfolioItems: 0,
         claimed: false,
         verifiedContact: false,

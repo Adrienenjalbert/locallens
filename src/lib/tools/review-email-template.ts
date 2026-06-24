@@ -66,10 +66,7 @@ function esc(value: string): string {
 }
 
 /** Replace {name} and {business} tokens, then HTML-escape the result. */
-function fillTokens(
-  text: string,
-  tokens: { name: string; business: string },
-): string {
+function fillTokens(text: string, tokens: { name: string; business: string }): string {
   const replaced = text
     .replace(/\{name\}/g, tokens.name)
     .replace(/\{business\}/g, tokens.business);
@@ -136,10 +133,7 @@ export function buildReviewEmailHtml(cfg: ReviewEmailConfig): string {
     cfg.lowRatingNote || DEFAULT_REVIEW_EMAIL_COPY.lowRatingNote,
     tokens,
   );
-  const signoff = fillTokens(
-    cfg.signoff || DEFAULT_REVIEW_EMAIL_COPY.signoff,
-    tokens,
-  );
+  const signoff = fillTokens(cfg.signoff || DEFAULT_REVIEW_EMAIL_COPY.signoff, tokens);
 
   const logoBlock = cfg.logoUrl.trim()
     ? `                <img src="${safeUrl(cfg.logoUrl)}" alt="${business}" width="120" style="display:block; border:0; max-width:120px; height:auto; margin:0 auto 12px;" />\n`

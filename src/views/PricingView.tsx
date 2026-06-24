@@ -101,8 +101,8 @@ export function PricingView() {
           Win more work, run your day in one place
         </h1>
         <p className="mx-auto max-w-prose text-muted-foreground">
-          Start free and see every lead waiting for you. Upgrade when you’re
-          ready to reply instantly, automate follow-ups and get paid faster.
+          Start free and see every lead waiting for you. Upgrade when you’re ready to
+          reply instantly, automate follow-ups and get paid faster.
         </p>
       </header>
 
@@ -114,10 +114,7 @@ export function PricingView() {
         </p>
       ) : null}
 
-      <section
-        aria-label="Plans"
-        className="grid gap-5 md:grid-cols-3 md:items-start"
-      >
+      <section aria-label="Plans" className="grid gap-5 md:grid-cols-3 md:items-start">
         {PLAN_ORDER.map((id) => (
           <PlanCard
             key={id}
@@ -223,9 +220,7 @@ function PlanCard({
             <span className="font-display text-3xl font-semibold text-foreground">
               {free ? "Free" : formatGBP(perMonth)}
             </span>
-            {!free ? (
-              <span className="text-sm text-muted-foreground">/mo</span>
-            ) : null}
+            {!free ? <span className="text-sm text-muted-foreground">/mo</span> : null}
           </p>
           {!free && interval === "annual" ? (
             <p className="mt-1 text-xs text-muted-foreground">
@@ -295,13 +290,16 @@ function ReferAPeer() {
     >
       <div className="flex items-center gap-2">
         <Users className="h-5 w-5 text-primary" aria-hidden />
-        <h2 id="refer-heading" className="font-display text-lg font-semibold text-foreground">
+        <h2
+          id="refer-heading"
+          className="font-display text-lg font-semibold text-foreground"
+        >
           Refer a peer — you both save
         </h2>
       </div>
       <p className="mt-1 max-w-prose text-sm text-muted-foreground">
-        Know another local business that would benefit? Share your link. When
-        they subscribe, you each get a discount on your next month.
+        Know another local business that would benefit? Share your link. When they
+        subscribe, you each get a discount on your next month.
       </p>
       <div className="mt-4 flex flex-col gap-2 sm:flex-row">
         <label htmlFor="referral-link" className="sr-only">

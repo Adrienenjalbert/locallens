@@ -49,13 +49,15 @@ function ClaimForm() {
         <CardBody className="space-y-3">
           <p className="text-sm text-muted-foreground">
             We sent a secure sign-in link to{" "}
-            <span className="font-medium text-foreground">{email}</span>. Open it
-            on this device to continue claiming{" "}
-            <span className="font-medium text-foreground">{businessName(businessSlug)}</span>.
+            <span className="font-medium text-foreground">{email}</span>. Open it on this
+            device to continue claiming{" "}
+            <span className="font-medium text-foreground">
+              {businessName(businessSlug)}
+            </span>
+            .
           </p>
           <p className="text-sm text-muted-foreground">
-            No password needed — the link signs you in and starts ownership
-            verification.
+            No password needed — the link signs you in and starts ownership verification.
           </p>
           <Button
             variant="ghost"
@@ -125,8 +127,8 @@ export default function ClaimPage() {
           Claim your listing
         </h1>
         <p className="text-sm text-muted-foreground">
-          Take control of your profile, respond to enquiries and see exactly how
-          to climb the honest rankings.
+          Take control of your profile, respond to enquiries and see exactly how to climb
+          the honest rankings.
         </p>
       </header>
 
@@ -148,7 +150,10 @@ export default function ClaimPage() {
             "Once verified, the profile unlocks: edit details, add photos and manage enquiries.",
           ].map((step, i) => (
             <li key={i} className="flex gap-2">
-              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+              <CheckCircle2
+                className="mt-0.5 h-4 w-4 shrink-0 text-primary"
+                aria-hidden
+              />
               <span>{step}</span>
             </li>
           ))}

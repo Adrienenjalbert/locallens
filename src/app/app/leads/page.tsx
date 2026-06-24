@@ -58,7 +58,11 @@ export default function LeadsPage() {
       setLeads((prev) =>
         prev.map((l) =>
           l.id === lead.id
-            ? { ...l, status: "won", first_response_at: l.first_response_at ?? new Date().toISOString() }
+            ? {
+                ...l,
+                status: "won",
+                first_response_at: l.first_response_at ?? new Date().toISOString(),
+              }
             : l,
         ),
       );
@@ -72,7 +76,8 @@ export default function LeadsPage() {
         <div>
           <h1 className="font-display text-2xl font-semibold text-foreground">Leads</h1>
           <p className="mt-1 text-muted-foreground">
-            New enquiries from your directory profile and tools. Respond fast — speed wins jobs.
+            New enquiries from your directory profile and tools. Respond fast — speed wins
+            jobs.
           </p>
         </div>
         <LifecycleStepper current="lead" />
@@ -139,7 +144,9 @@ function LeadRow({
           </div>
           <div className="flex shrink-0 items-center gap-2">
             <StatusBadge status={lead.status} />
-            <Badge tone={overdue ? "danger" : lead.first_response_at ? "success" : "muted"}>
+            <Badge
+              tone={overdue ? "danger" : lead.first_response_at ? "success" : "muted"}
+            >
               {lead.first_response_at ? "Responded" : `${formatHours(hours)} waiting`}
             </Badge>
           </div>
@@ -194,7 +201,12 @@ function LeadRow({
               </Button>
             </>
           )}
-          <Button size="sm" variant="ghost" disabled={busy} onClick={() => onConvert(lead)}>
+          <Button
+            size="sm"
+            variant="ghost"
+            disabled={busy}
+            onClick={() => onConvert(lead)}
+          >
             <UserPlus className="h-4 w-4" aria-hidden /> Convert to customer
           </Button>
         </div>

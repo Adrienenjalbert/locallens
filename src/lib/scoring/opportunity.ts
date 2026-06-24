@@ -101,9 +101,7 @@ const clamp01 = (n: number): number => Math.min(1, Math.max(0, n));
 // queries. Tunable via the loop (promote a winning threshold into config).
 export const BUILD_THRESHOLD = 0.08;
 
-export function computeOpportunity(
-  inputs: OpportunityInputs,
-): OpportunityResult {
+export function computeOpportunity(inputs: OpportunityInputs): OpportunityResult {
   const volume = normaliseVolume(inputs.volume);
   const intent = intentWeight(inputs.intentStage, inputs.intentValue);
   const competitionGap = clamp01(inputs.competitionGap);
@@ -114,8 +112,7 @@ export function computeOpportunity(
   // no usable data) correctly zeroes the opportunity. This is the profit-aware
   // filter — demand alone is not enough.
   const score =
-    Math.round(volume * intent * competitionGap * affiliate * supply * 1000) /
-    1000;
+    Math.round(volume * intent * competitionGap * affiliate * supply * 1000) / 1000;
 
   return {
     score,
@@ -157,23 +154,18 @@ export interface MarketEntryResult {
  * strategist's market-entry filter: a market with high affiliate-RPM potential
  * can be validated before any supply exists.
  */
-export function computeMarketEntry(
-  inputs: MarketEntryInputs,
-): MarketEntryResult {
+export function computeMarketEntry(inputs: MarketEntryInputs): MarketEntryResult {
   const results = inputs.keywords.map(computeOpportunity);
   const total = results.length || 1;
   const entryScore =
-    Math.round(
-      (results.reduce((sum, r) => sum + r.score, 0) / total) * 1000,
-    ) / 1000;
+    Math.round((results.reduce((sum, r) => sum + r.score, 0) / total) * 1000) / 1000;
 
   // "Affiliate-fundable" = the demand×winnability×affiliate signal is healthy
   // on average even if we ignore supply readiness (treat supply as fully ready).
-  const affiliateOnly = inputs.keywords.map((k) =>
-    computeOpportunity({ ...k, supplyReadiness: 1 }).score,
+  const affiliateOnly = inputs.keywords.map(
+    (k) => computeOpportunity({ ...k, supplyReadiness: 1 }).score,
   );
-  const affiliateScore =
-    affiliateOnly.reduce((sum, s) => sum + s, 0) / total;
+  const affiliateScore = affiliateOnly.reduce((sum, s) => sum + s, 0) / total;
 
   return {
     vertical: inputs.vertical,

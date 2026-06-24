@@ -21,7 +21,9 @@ export type ArmStats = Record<string, ArmStat>;
 export type Rng = () => number; // returns [0,1)
 
 /** The context cell the bandit indexes on. Coarse enough to gather signal. */
-export function cellKey(ctx: Pick<RouterContext, "pageType" | "intentStage" | "geoTier">): string {
+export function cellKey(
+  ctx: Pick<RouterContext, "pageType" | "intentStage" | "geoTier">,
+): string {
   return `${ctx.pageType}|${ctx.intentStage}|${ctx.geoTier ?? 1}`;
 }
 
@@ -107,9 +109,7 @@ export function thompsonSelect(
   for (const cand of eligible) {
     const stat = getStat(stats, cell, armKey(cand));
     const theta =
-      mode === "mean"
-        ? stat.alpha / (stat.alpha + stat.beta)
-        : sampleBeta(stat, rng);
+      mode === "mean" ? stat.alpha / (stat.alpha + stat.beta) : sampleBeta(stat, rng);
     // Maximise expected REVENUE: P(convert) × value-per-conversion proxy.
     // expectedValue already encodes the per-impression £ proxy, so we blend the
     // learned conversion signal with it to rank by learned expected revenue.

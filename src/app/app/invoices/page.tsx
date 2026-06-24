@@ -37,9 +37,7 @@ export default function InvoicesPage() {
 
   const outstanding = useMemo(
     () =>
-      invoices
-        .filter((i) => i.status !== "paid")
-        .reduce((sum, i) => sum + i.total, 0),
+      invoices.filter((i) => i.status !== "paid").reduce((sum, i) => sum + i.total, 0),
     [invoices],
   );
 
@@ -66,7 +64,9 @@ export default function InvoicesPage() {
       <header className="space-y-3">
         <div className="flex flex-wrap items-end justify-between gap-2">
           <div>
-            <h1 className="font-display text-2xl font-semibold text-foreground">Invoices</h1>
+            <h1 className="font-display text-2xl font-semibold text-foreground">
+              Invoices
+            </h1>
             <p className="mt-1 text-muted-foreground">
               Get paid for the work you&apos;ve done. Chase anything overdue first.
             </p>
@@ -96,7 +96,11 @@ export default function InvoicesPage() {
         <ul className="space-y-3">
           {invoices.map((invoice) => (
             <li key={invoice.id}>
-              <InvoiceRow invoice={invoice} busy={busyId === invoice.id} onPaid={markPaid} />
+              <InvoiceRow
+                invoice={invoice}
+                busy={busyId === invoice.id}
+                onPaid={markPaid}
+              />
             </li>
           ))}
         </ul>
@@ -153,7 +157,11 @@ function InvoiceStatusBadge({ invoice }: { invoice: Invoice }) {
     );
   }
   const tone =
-    invoice.status === "paid" ? "success" : invoice.status === "sent" ? "primary" : "muted";
+    invoice.status === "paid"
+      ? "success"
+      : invoice.status === "sent"
+        ? "primary"
+        : "muted";
   return (
     <Badge tone={tone} className="capitalize">
       {invoice.status}

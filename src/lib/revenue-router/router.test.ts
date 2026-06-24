@@ -56,10 +56,9 @@ describe("RevenueRouter trust floor", () => {
 
   it("never shows a monetisation unit before the answer block", () => {
     const router = new RevenueRouter(policy);
-    const d = router.decide(
-      { ...baseCtx, answerAlreadyRendered: false },
-      [affiliate(5, 0.9)],
-    );
+    const d = router.decide({ ...baseCtx, answerAlreadyRendered: false }, [
+      affiliate(5, 0.9),
+    ]);
     expect(d.chosen).toBeNull();
     expect(d.candidates[0].reason).toBe("answer_not_yet_rendered");
   });

@@ -2,7 +2,13 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { admin, type UiSnapshotRow } from "@/lib/admin/repo";
-import { Badge, Card, CardBody, CardHeader, EmptyState } from "@/components/ui/primitives";
+import {
+  Badge,
+  Card,
+  CardBody,
+  CardHeader,
+  EmptyState,
+} from "@/components/ui/primitives";
 import { cn } from "@/lib/utils";
 
 // /admin/ui — UI VERIFICATION release gate. Per-deploy + scheduled screenshots
@@ -59,7 +65,11 @@ export default function AdminUiPage() {
   const counts = useMemo(() => {
     const c = { ok: 0, changed: 0, broken: 0 };
     for (const r of rows) {
-      if (r.diff_status === "ok" || r.diff_status === "changed" || r.diff_status === "broken") {
+      if (
+        r.diff_status === "ok" ||
+        r.diff_status === "changed" ||
+        r.diff_status === "broken"
+      ) {
         c[r.diff_status]++;
       }
     }
@@ -74,20 +84,32 @@ export default function AdminUiPage() {
   return (
     <div className="mx-auto max-w-5xl space-y-6 p-4 md:p-8">
       <header className="space-y-1">
-        <h1 className="font-display text-2xl font-semibold text-foreground">UI verification</h1>
+        <h1 className="font-display text-2xl font-semibold text-foreground">
+          UI verification
+        </h1>
         <p className="text-sm text-muted-foreground">
-          Per-deploy and scheduled screenshots across page-types × devices. A broken (critical)
-          visual regression blocks release; a thin or ugly route is routed to the enrichment queue.
+          Per-deploy and scheduled screenshots across page-types × devices. A broken
+          (critical) visual regression blocks release; a thin or ugly route is routed to
+          the enrichment queue.
         </p>
       </header>
 
       <div className="grid grid-cols-3 gap-3">
         <SummaryCard label="OK" value={counts.ok} tone="success" />
         <SummaryCard label="Changed" value={counts.changed} tone="warning" />
-        <SummaryCard label="Broken" value={counts.broken} tone="danger" hint="blocks release" />
+        <SummaryCard
+          label="Broken"
+          value={counts.broken}
+          tone="danger"
+          hint="blocks release"
+        />
       </div>
 
-      <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by diff status">
+      <div
+        className="flex flex-wrap gap-2"
+        role="group"
+        aria-label="Filter by diff status"
+      >
         {FILTERS.map((f) => (
           <button
             key={f.key}
@@ -110,7 +132,9 @@ export default function AdminUiPage() {
         <p className="text-sm text-muted-foreground">Loading snapshots…</p>
       ) : visible.length === 0 ? (
         <EmptyState
-          title={rows.length === 0 ? "No UI snapshots yet" : "Nothing matches this filter"}
+          title={
+            rows.length === 0 ? "No UI snapshots yet" : "Nothing matches this filter"
+          }
           description={
             rows.length === 0
               ? "The ui-verify function writes screenshot/visual-regression results here."
@@ -128,12 +152,24 @@ export default function AdminUiPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b text-left text-xs uppercase tracking-wide text-muted-foreground">
-                  <th scope="col" className="px-4 py-2 font-medium">Page type</th>
-                  <th scope="col" className="px-4 py-2 font-medium">Device</th>
-                  <th scope="col" className="px-4 py-2 font-medium">Diff</th>
-                  <th scope="col" className="px-4 py-2 font-medium">Issues</th>
-                  <th scope="col" className="px-4 py-2 font-medium">Captured</th>
-                  <th scope="col" className="px-4 py-2 font-medium">Screenshot</th>
+                  <th scope="col" className="px-4 py-2 font-medium">
+                    Page type
+                  </th>
+                  <th scope="col" className="px-4 py-2 font-medium">
+                    Device
+                  </th>
+                  <th scope="col" className="px-4 py-2 font-medium">
+                    Diff
+                  </th>
+                  <th scope="col" className="px-4 py-2 font-medium">
+                    Issues
+                  </th>
+                  <th scope="col" className="px-4 py-2 font-medium">
+                    Captured
+                  </th>
+                  <th scope="col" className="px-4 py-2 font-medium">
+                    Screenshot
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -151,8 +187,12 @@ export default function AdminUiPage() {
                           {r.diff_status ?? "unknown"}
                         </Badge>
                       </td>
-                      <td className="px-4 py-2 tabular-nums text-muted-foreground">{issues}</td>
-                      <td className="px-4 py-2 text-muted-foreground">{formatWhen(r.captured_at)}</td>
+                      <td className="px-4 py-2 tabular-nums text-muted-foreground">
+                        {issues}
+                      </td>
+                      <td className="px-4 py-2 text-muted-foreground">
+                        {formatWhen(r.captured_at)}
+                      </td>
                       <td className="px-4 py-2">
                         {r.screenshot_url ? (
                           <a
@@ -199,7 +239,9 @@ function SummaryCard({
     <Card>
       <CardBody className="py-4">
         <p className="text-xs uppercase tracking-wide text-muted-foreground">{label}</p>
-        <p className={cn("mt-1 text-2xl font-semibold tabular-nums", toneClass)}>{value}</p>
+        <p className={cn("mt-1 text-2xl font-semibold tabular-nums", toneClass)}>
+          {value}
+        </p>
         {hint && <p className="mt-0.5 text-xs text-muted-foreground">{hint}</p>}
       </CardBody>
     </Card>

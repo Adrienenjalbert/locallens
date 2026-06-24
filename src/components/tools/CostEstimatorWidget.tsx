@@ -45,8 +45,7 @@ export function CostEstimatorWidget({
     [router, searchParams],
   );
 
-  const sizeLabel =
-    GARDEN_SIZES.find((s) => s.value === sizeValue)?.label ?? sizeValue;
+  const sizeLabel = GARDEN_SIZES.find((s) => s.value === sizeValue)?.label ?? sizeValue;
   const scopeLabel =
     SCOPE_OPTIONS.find((s) => s.value === scopeValue)?.label ?? scopeValue;
 
@@ -60,9 +59,7 @@ export function CostEstimatorWidget({
       <CardBody className="space-y-4">
         {inputs.includes("garden_size") && (
           <fieldset>
-            <legend className="text-sm font-medium text-foreground">
-              Garden size
-            </legend>
+            <legend className="text-sm font-medium text-foreground">Garden size</legend>
             <div className="mt-2 grid gap-2 sm:grid-cols-2">
               {GARDEN_SIZES.map((opt) => (
                 <OptionButton
@@ -78,9 +75,7 @@ export function CostEstimatorWidget({
 
         {inputs.includes("scope") && (
           <fieldset>
-            <legend className="text-sm font-medium text-foreground">
-              Job type
-            </legend>
+            <legend className="text-sm font-medium text-foreground">Job type</legend>
             <div className="mt-2 grid gap-2 sm:grid-cols-2">
               {SCOPE_OPTIONS.map((opt) => (
                 <OptionButton
@@ -94,10 +89,7 @@ export function CostEstimatorWidget({
           </fieldset>
         )}
 
-        <div
-          aria-live="polite"
-          className="rounded-lg border bg-muted/40 p-4 text-center"
-        >
+        <div aria-live="polite" className="rounded-lg border bg-muted/40 p-4 text-center">
           <p className="text-sm text-muted-foreground">Estimated range</p>
           <p className="mt-1 font-display text-3xl font-semibold text-foreground">
             {formatGBP(range.low)}

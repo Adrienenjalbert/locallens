@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { CheckCircle2, ShieldCheck, Sparkles } from "lucide-react";
+import { CheckCircle2, ShieldCheck } from "lucide-react";
 import { Badge, Card, CardBody, CardHeader } from "@/components/ui/primitives";
 import { QualityScoreBadge } from "@/components/directory/QualityScoreBadge";
-import {
-  computeQualityScore,
-  type ScoreBreakdown,
-} from "@/lib/scoring/quality-score";
+import { ProjectCard } from "@/components/portfolio/ProjectCard";
+import { projectsForBusiness } from "@/lib/portfolio/projects";
+import { titleCaseSlug } from "@/lib/format";
+import { computeQualityScore, type ScoreBreakdown } from "@/lib/scoring/quality-score";
 import type { ScoreWeights } from "@config/types";
 import { getVertical } from "@config/index";
 import { gardeners } from "@config/verticals/gardeners";
@@ -39,13 +39,6 @@ const COMPONENT_META: Record<keyof ScoreWeights, { label: string; blurb: string 
   },
 };
 
-function titleCaseSlug(slug: string): string {
-  return slug
-    .split("-")
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(" ");
-}
-
 interface VerificationFlag {
   label: string;
   verified: boolean;
@@ -67,6 +60,7 @@ export function ProfileView({
   const businessName = titleCaseSlug(business);
   const placeName = titleCaseSlug(location);
   const verticalName = config.name.toLowerCase();
+  const projects = projectsForBusiness(vertical, location, business);
 
   // Demo signals — in production these come from the golden record + reviews +
   // portfolio + credentials. Here they drive a real, explainable breakdown so
@@ -101,7 +95,10 @@ export function ProfileView({
     <main className="mx-auto max-w-3xl space-y-6 px-4 py-8">
       <header className="space-y-3">
         <p className="text-sm text-muted-foreground">
-          <Link href={`/${vertical}/${location}`} className="hover:text-foreground hover:underline">
+          <Link
+            href={`/${vertical}/${location}`}
+            className="hover:text-foreground hover:underline"
+          >
             {config.name} in {placeName}
           </Link>
         </p>
@@ -113,13 +110,11 @@ export function ProfileView({
         </div>
         <p className="text-muted-foreground">
           A {verticalName.replace(/s$/, "")} in {placeName} covering lawn care,
-          landscaping and hedge trimming. Ranked honestly by the LocalLens
-          Quality Score — never pay-to-rank.
+          landscaping and hedge trimming. Ranked honestly by the LocalLens Quality Score —
+          never pay-to-rank.
         </p>
         {lastUpdatedLabel && (
-          <p className="text-xs text-muted-foreground">
-            Updated {lastUpdatedLabel}
-          </p>
+          <p className="text-xs text-muted-foreground">Updated {lastUpdatedLabel}</p>
         )}
       </header>
 
@@ -129,7 +124,10 @@ export function ProfileView({
         <Card>
           <CardHeader className="flex items-center gap-2">
             <ShieldCheck className="h-5 w-5 text-primary" aria-hidden />
-            <h2 id="verification-heading" className="font-display text-lg font-semibold text-foreground">
+            <h2
+              id="verification-heading"
+              className="font-display text-lg font-semibold text-foreground"
+            >
               Verification
             </h2>
           </CardHeader>
@@ -154,25 +152,27 @@ export function ProfileView({
       <section aria-labelledby="portfolio-heading">
         <Card>
           <CardHeader>
-            <h2 id="portfolio-heading" className="font-display text-lg font-semibold text-foreground">
+            <h2
+              id="portfolio-heading"
+              className="font-display text-lg font-semibold text-foreground"
+            >
               Portfolio
             </h2>
           </CardHeader>
           <CardBody>
-            <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <li
-                  key={i}
-                  aria-hidden
-                  className="flex aspect-square items-center justify-center rounded-md border border-dashed bg-muted/40 text-muted-foreground"
-                >
-                  <Sparkles className="h-6 w-6 opacity-50" />
-                </li>
-              ))}
-            </ul>
-            <p className="mt-3 text-sm text-muted-foreground">
-              Photos of completed work appear here once the owner adds them.
-            </p>
+            {projects.length > 0 ? (
+              <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {projects.map((p) => (
+                  <li key={p.slug}>
+                    <ProjectCard project={p} aspect="square" />
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                Photos of completed work appear here once the owner adds them.
+              </p>
+            )}
           </CardBody>
         </Card>
       </section>
@@ -181,12 +181,15 @@ export function ProfileView({
         aria-labelledby="claim-heading"
         className="rounded-lg border border-primary/30 bg-primary/5 p-5"
       >
-        <h2 id="claim-heading" className="font-display text-lg font-semibold text-foreground">
+        <h2
+          id="claim-heading"
+          className="font-display text-lg font-semibold text-foreground"
+        >
           Is this your business?
         </h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          Claim this listing to add photos, verify your credentials and respond
-          to enquiries — and see exactly how to climb the rankings.
+          Claim this listing to add photos, verify your credentials and respond to
+          enquiries — and see exactly how to climb the rankings.
         </p>
         <Link
           href={`/claim?business=${business}`}
@@ -210,12 +213,15 @@ function WhyRankedHere({ breakdown }: { breakdown: ScoreBreakdown }) {
     <section aria-labelledby="why-ranked-heading">
       <Card>
         <CardHeader>
-          <h2 id="why-ranked-heading" className="font-display text-lg font-semibold text-foreground">
+          <h2
+            id="why-ranked-heading"
+            className="font-display text-lg font-semibold text-foreground"
+          >
             Why ranked here
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            The Quality Score is {breakdown.score}/100. Every factor is shown —
-            no hidden weighting, no pay-to-rank.
+            The Quality Score is {breakdown.score}/100. Every factor is shown — no hidden
+            weighting, no pay-to-rank.
           </p>
         </CardHeader>
         <CardBody>

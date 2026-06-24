@@ -102,12 +102,8 @@ export function ComparatorView({
 
   const selected = BUSINESSES;
 
-  const bestOverall = [...selected].sort(
-    (a, b) => b.qualityScore - a.qualityScore,
-  )[0];
-  const fastest = [...selected].sort(
-    (a, b) => a.responseHours - b.responseHours,
-  )[0];
+  const bestOverall = [...selected].sort((a, b) => b.qualityScore - a.qualityScore)[0];
+  const fastest = [...selected].sort((a, b) => a.responseHours - b.responseHours)[0];
   const bestValue = [...selected].sort(
     (a, b) => a.priceBand.length - b.priceBand.length || b.rating - a.rating,
   )[0];
@@ -276,9 +272,7 @@ function SummaryPick({
   return (
     <div className="rounded-lg border bg-card p-4">
       <Badge tone={tone}>{title}</Badge>
-      <p className="mt-2 font-display text-base font-semibold text-foreground">
-        {name}
-      </p>
+      <p className="mt-2 font-display text-base font-semibold text-foreground">{name}</p>
     </div>
   );
 }

@@ -42,7 +42,9 @@ export default function CustomersPage() {
       <header className="space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div>
-            <h1 className="font-display text-2xl font-semibold text-foreground">Customers</h1>
+            <h1 className="font-display text-2xl font-semibold text-foreground">
+              Customers
+            </h1>
             <p className="mt-1 text-muted-foreground">
               Your book of business. Win lapsed customers back before they forget you.
             </p>

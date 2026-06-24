@@ -9,10 +9,9 @@ import { getVertical } from "@config/index";
 import { gardeners } from "@config/verticals/gardeners";
 import { withBasePath } from "@/lib/paths";
 import { SHORTLIST } from "@/lib/directory/shortlist";
-
-function titleCase(slug: string): string {
-  return slug.charAt(0).toUpperCase() + slug.slice(1);
-}
+import { ProjectCard } from "@/components/portfolio/ProjectCard";
+import { projectsForLocation } from "@/lib/portfolio/projects";
+import { titleCaseSlug } from "@/lib/format";
 
 const AFFILIATE_DATA: Record<string, AffiliateUnitData> = {
   "offer-liability": {
@@ -40,7 +39,8 @@ export function LocationPage({
 }) {
   const config = getVertical(vertical) ?? gardeners;
   const verticalName = config.name.toLowerCase();
-  const placeName = titleCase(location);
+  const placeName = titleCaseSlug(location);
+  const recentWork = projectsForLocation(vertical, location).slice(0, 6);
 
   // Context the server would compute (intent classifier + supply lookup).
   const baseContext: Omit<RouterContext, "slot"> = {
@@ -94,10 +94,28 @@ export function LocationPage({
         ))}
       </section>
 
+      {recentWork.length > 0 && (
+        <section aria-labelledby="recent-work-heading" className="space-y-3">
+          <h2
+            id="recent-work-heading"
+            className="font-display text-xl font-semibold text-foreground"
+          >
+            Recent work in {placeName}
+          </h2>
+          <ul className="grid gap-3 sm:grid-cols-3">
+            {recentWork.map((p) => (
+              <li key={`${p.business}-${p.slug}`}>
+                <ProjectCard project={p} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       {lastUpdatedLabel && (
         <p className="text-xs text-muted-foreground">
-          Updated {lastUpdatedLabel} · rankings refresh as new reviews and
-          verifications arrive.
+          Updated {lastUpdatedLabel} · rankings refresh as new reviews and verifications
+          arrive.
         </p>
       )}
 

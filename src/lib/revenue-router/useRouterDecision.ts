@@ -90,7 +90,8 @@ export function useRouterDecision({
   }, [fetchLive, slot, context.verticalSlug, context.pageType, context.intentStage]);
 
   const decision = useMemo(() => {
-    const candidates = serverCandidates.length > 0 ? serverCandidates : fallbackCandidates;
+    const candidates =
+      serverCandidates.length > 0 ? serverCandidates : fallbackCandidates;
     // Use the bandit only once posteriors have loaded (client-only). Until then,
     // and whenever the policy isn't a bandit, use the deterministic rules router
     // — identical trust floor, SSG-safe, no hydration mismatch.

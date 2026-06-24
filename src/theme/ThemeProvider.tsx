@@ -40,9 +40,15 @@ export function ThemeProvider({
     (Object.keys(VAR_MAP) as (keyof ThemeTokens)[]).forEach((key) => {
       const value = tokens[key];
       const cssVar = VAR_MAP[key];
-      if (key === "fontSans") root.style.setProperty(cssVar, `"${value}", system-ui, sans-serif`);
-      else if (key === "fontDisplay") root.style.setProperty(cssVar, `"${value}", Georgia, serif`);
-      else root.style.setProperty(cssVar, value);
+      // For the brand fonts that next/font self-hosts (layout.tsx), prefer the
+      // generated CSS variable so we use the optimised, preloaded font files.
+      if (key === "fontSans") {
+        const preloaded = value === "Inter" ? "var(--font-inter), " : "";
+        root.style.setProperty(cssVar, `${preloaded}"${value}", system-ui, sans-serif`);
+      } else if (key === "fontDisplay") {
+        const preloaded = value === "Fraunces" ? "var(--font-fraunces), " : "";
+        root.style.setProperty(cssVar, `${preloaded}"${value}", Georgia, serif`);
+      } else root.style.setProperty(cssVar, value);
     });
   }, [tokens]);
 

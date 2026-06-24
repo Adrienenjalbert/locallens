@@ -39,6 +39,9 @@ supabase/.temp
 .idea/
 .vscode/*
 !.vscode/extensions.json
+
+# cursor agent local state
+.cursor/hooks/state/
 *.suo
 *.ntvs*
 *.njsproj
@@ -54,3 +57,4 @@ yarn-error.log*
 
 # test / coverage
 coverage/
+.firecrawl/

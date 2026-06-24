@@ -5,6 +5,7 @@ import { VERTICALS } from "@config/index";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { findPublishedPage } from "@/lib/seo/pages";
 import { siteUrl } from "@/lib/paths";
+import { formatMonthYear, titleCaseSlug } from "@/lib/format";
 import {
   buildBreadcrumbJsonLd,
   buildItemListJsonLd,
@@ -25,15 +26,10 @@ export function generateStaticParams(): RouteParams[] {
   return [{ vertical: "gardeners", location: "manchester" }];
 }
 
-export function generateMetadata({
-  params,
-}: {
-  params: RouteParams;
-}): Metadata {
+export function generateMetadata({ params }: { params: RouteParams }): Metadata {
   const vertical = VERTICALS[params.vertical];
   const name = vertical?.name ?? params.vertical;
-  const place =
-    params.location.charAt(0).toUpperCase() + params.location.slice(1);
+  const place = titleCaseSlug(params.location);
   const path = `/${params.vertical}/${params.location}/`;
   return buildPageMetadata({
     title: `Best ${name} in ${place}`,
@@ -43,22 +39,10 @@ export function generateMetadata({
   });
 }
 
-function titleCase(slug: string): string {
-  return slug.charAt(0).toUpperCase() + slug.slice(1);
-}
-
-function formatDate(iso?: string): string | undefined {
-  if (!iso) return undefined;
-  const d = new Date(iso);
-  return Number.isNaN(d.getTime())
-    ? undefined
-    : d.toLocaleDateString("en-GB", { month: "short", year: "numeric" });
-}
-
 export default function Page({ params }: { params: RouteParams }) {
   const vertical = VERTICALS[params.vertical];
   const name = vertical?.name ?? params.vertical;
-  const place = titleCase(params.location);
+  const place = titleCaseSlug(params.location);
   const path = `/${params.vertical}/${params.location}/`;
   const published = findPublishedPage(path);
 
@@ -100,7 +84,7 @@ export default function Page({ params }: { params: RouteParams }) {
       <LocationPage
         vertical={params.vertical}
         location={params.location}
-        lastUpdatedLabel={formatDate(published?.lastModified)}
+        lastUpdatedLabel={formatMonthYear(published?.lastModified)}
       />
     </>
   );

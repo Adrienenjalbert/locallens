@@ -2,7 +2,13 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { admin, type DataCheckRow } from "@/lib/admin/repo";
-import { Badge, Card, CardBody, CardHeader, EmptyState } from "@/components/ui/primitives";
+import {
+  Badge,
+  Card,
+  CardBody,
+  CardHeader,
+  EmptyState,
+} from "@/components/ui/primitives";
 import { cn } from "@/lib/utils";
 
 // /admin/data — DATA release gate. Recent data_check rows from the scheduled
@@ -58,7 +64,8 @@ export default function AdminDataPage() {
   const counts = useMemo(() => {
     const c = { pass: 0, fail: 0, flag: 0 };
     for (const r of rows) {
-      if (r.status === "pass" || r.status === "fail" || r.status === "flag") c[r.status]++;
+      if (r.status === "pass" || r.status === "fail" || r.status === "flag")
+        c[r.status]++;
     }
     return c;
   }, [rows]);
@@ -71,10 +78,12 @@ export default function AdminDataPage() {
   return (
     <div className="mx-auto max-w-5xl space-y-6 p-4 md:p-8">
       <header className="space-y-1">
-        <h1 className="font-display text-2xl font-semibold text-foreground">Data checks</h1>
+        <h1 className="font-display text-2xl font-semibold text-foreground">
+          Data checks
+        </h1>
         <p className="text-sm text-muted-foreground">
-          Constant verification of golden records — a failing accuracy or freshness check is a
-          release gate and can hold a business or noindex its pages.
+          Constant verification of golden records — a failing accuracy or freshness check
+          is a release gate and can hold a business or noindex its pages.
         </p>
       </header>
 
@@ -125,25 +134,41 @@ export default function AdminDataPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b text-left text-xs uppercase tracking-wide text-muted-foreground">
-                  <th scope="col" className="px-4 py-2 font-medium">Target</th>
-                  <th scope="col" className="px-4 py-2 font-medium">Type</th>
-                  <th scope="col" className="px-4 py-2 font-medium">Status</th>
-                  <th scope="col" className="px-4 py-2 font-medium">Sampled</th>
+                  <th scope="col" className="px-4 py-2 font-medium">
+                    Target
+                  </th>
+                  <th scope="col" className="px-4 py-2 font-medium">
+                    Type
+                  </th>
+                  <th scope="col" className="px-4 py-2 font-medium">
+                    Status
+                  </th>
+                  <th scope="col" className="px-4 py-2 font-medium">
+                    Sampled
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {visible.map((r) => (
                   <tr key={r.id} className="border-b last:border-0">
-                    <td className="px-4 py-2 font-mono text-xs" title={r.target ?? undefined}>
+                    <td
+                      className="px-4 py-2 font-mono text-xs"
+                      title={r.target ?? undefined}
+                    >
                       {shortTarget(r.target)}
                     </td>
                     <td className="px-4 py-2 capitalize">{r.check_type}</td>
                     <td className="px-4 py-2">
-                      <Badge tone={STATUS_TONE[r.status] ?? "muted"} className="capitalize">
+                      <Badge
+                        tone={STATUS_TONE[r.status] ?? "muted"}
+                        className="capitalize"
+                      >
                         {r.status}
                       </Badge>
                     </td>
-                    <td className="px-4 py-2 text-muted-foreground">{formatWhen(r.sampled_at)}</td>
+                    <td className="px-4 py-2 text-muted-foreground">
+                      {formatWhen(r.sampled_at)}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -173,7 +198,9 @@ function SummaryCard({
     <Card>
       <CardBody className="py-4">
         <p className="text-xs uppercase tracking-wide text-muted-foreground">{label}</p>
-        <p className={cn("mt-1 text-2xl font-semibold tabular-nums", toneClass)}>{value}</p>
+        <p className={cn("mt-1 text-2xl font-semibold tabular-nums", toneClass)}>
+          {value}
+        </p>
       </CardBody>
     </Card>
   );

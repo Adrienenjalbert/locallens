@@ -171,7 +171,10 @@ function JobRow({
                 <Repeat className="mr-1 h-3 w-3" aria-hidden /> Recurring
               </Badge>
             )}
-            <Badge tone={job.status === "in_progress" ? "warning" : "muted"} className="capitalize">
+            <Badge
+              tone={job.status === "in_progress" ? "warning" : "muted"}
+              className="capitalize"
+            >
               {job.status.replace("_", " ")}
             </Badge>
           </div>

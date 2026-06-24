@@ -8,7 +8,30 @@
 // gardeners × Manchester wedge for now; swapping the source for a Supabase read
 // at build time is the only change needed to scale this to thousands of pages.
 
-export type PageKind = "home" | "location" | "profile" | "tool" | "static";
+import {
+  activeCategories,
+  liveTools,
+  toolPath,
+  categoryPath,
+} from "@/lib/tools/registry";
+import {
+  allProjects,
+  ideasPath,
+  projectPath,
+  projectStyles,
+  projectsForStyle,
+} from "@/lib/portfolio/projects";
+
+export type PageKind =
+  | "home"
+  | "location"
+  | "profile"
+  | "project"
+  | "ideas"
+  | "tool"
+  | "tool-hub"
+  | "tool-category"
+  | "static";
 
 export interface PublishedPage {
   kind: PageKind;
@@ -67,7 +90,71 @@ export const PUBLISHED_PAGES: PublishedPage[] = [
     priority: 0.6,
     changeFrequency: "monthly",
   },
+  // ── Free-tools directory ─────────────────────────────────────────────────
+  // Generated from the registry (src/lib/tools/registry.ts) so the hub,
+  // category landing pages and per-tool pages can never drift from the sitemap.
+  ...freeToolsDirectoryPages(),
+  // ── Portfolio (projects + style galleries) ───────────────────────────────
+  // Generated from the projects module so every published project page and
+  // /ideas/[style]/ gallery is crawlable the moment it exists.
+  ...portfolioPages(),
 ];
+
+/** The hub + one page per active category + one page per live tool. */
+function freeToolsDirectoryPages(): PublishedPage[] {
+  const hub: PublishedPage = {
+    kind: "tool-hub",
+    path: "/tools/",
+    lastModified: "2026-06-15",
+    priority: 0.8,
+    changeFrequency: "weekly",
+  };
+
+  const categories: PublishedPage[] = activeCategories().map((c) => ({
+    kind: "tool-category",
+    path: categoryPath(c.slug),
+    lastModified: "2026-06-15",
+    priority: 0.7,
+    changeFrequency: "weekly",
+  }));
+
+  const tools: PublishedPage[] = liveTools().map((t) => ({
+    kind: "tool",
+    path: toolPath(t.slug),
+    lastModified: t.lastModified,
+    priority: 0.7,
+    changeFrequency: "monthly",
+  }));
+
+  return [hub, ...categories, ...tools];
+}
+
+/** One page per published project + one per style gallery, from the projects module. */
+function portfolioPages(): PublishedPage[] {
+  const projects: PublishedPage[] = allProjects().map((p) => ({
+    kind: "project",
+    path: projectPath(p),
+    lastModified: p.lastModified,
+    priority: 0.6,
+    changeFrequency: "monthly",
+  }));
+
+  const ideas: PublishedPage[] = projectStyles().map((style) => {
+    const latest = projectsForStyle(style)
+      .map((p) => p.lastModified)
+      .sort()
+      .at(-1);
+    return {
+      kind: "ideas",
+      path: ideasPath(style),
+      lastModified: latest ?? "2026-06-15",
+      priority: 0.6,
+      changeFrequency: "monthly",
+    };
+  });
+
+  return [...projects, ...ideas];
+}
 
 /** Look up the publish metadata for a path (used to surface freshness on-page). */
 export function findPublishedPage(path: string): PublishedPage | undefined {

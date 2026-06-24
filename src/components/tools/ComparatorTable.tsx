@@ -117,7 +117,9 @@ export function ComparatorTable<TBusiness extends { id: string }>({
             >
               <caption className="sr-only">{`${caption} — ${col.name}`}</caption>
               <thead>
-                <tr className={cn("border-b bg-muted/40", col.highlight && "bg-primary/10")}>
+                <tr
+                  className={cn("border-b bg-muted/40", col.highlight && "bg-primary/10")}
+                >
                   <th scope="colgroup" colSpan={2} className="p-3 text-left">
                     <span className="font-display text-base font-semibold text-foreground">
                       {col.name}

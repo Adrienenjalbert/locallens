@@ -2,7 +2,14 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { admin, type ProspectRow } from "@/lib/admin/repo";
-import { Badge, Button, Card, CardBody, CardHeader, EmptyState } from "@/components/ui/primitives";
+import {
+  Badge,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  EmptyState,
+} from "@/components/ui/primitives";
 import { cn } from "@/lib/utils";
 
 // /admin/prospects — PROSPECTING console (our GTM). Every business we cover is a
@@ -15,7 +22,10 @@ import { cn } from "@/lib/utils";
 
 type StatusFilter = "all" | "new" | "contacted" | "won" | "lost";
 
-const STATUS_TONE: Record<string, "success" | "danger" | "warning" | "primary" | "muted"> = {
+const STATUS_TONE: Record<
+  string,
+  "success" | "danger" | "warning" | "primary" | "muted"
+> = {
   new: "primary",
   contacted: "warning",
   won: "success",
@@ -49,7 +59,8 @@ function needTone(score: number | null): {
 }
 
 function signalSummary(signals: unknown): { key: string; value: string }[] {
-  if (typeof signals !== "object" || signals === null || Array.isArray(signals)) return [];
+  if (typeof signals !== "object" || signals === null || Array.isArray(signals))
+    return [];
   const record = signals as Record<string, unknown>;
   const out: { key: string; value: string }[] = [];
   for (const key of SIGNAL_KEYS) {
@@ -93,7 +104,12 @@ export default function AdminProspectsPage() {
   const counts = useMemo(() => {
     const c = { new: 0, contacted: 0, won: 0, lost: 0 };
     for (const r of rows) {
-      if (r.status === "new" || r.status === "contacted" || r.status === "won" || r.status === "lost") {
+      if (
+        r.status === "new" ||
+        r.status === "contacted" ||
+        r.status === "won" ||
+        r.status === "lost"
+      ) {
         c[r.status]++;
       }
     }
@@ -110,8 +126,9 @@ export default function AdminProspectsPage() {
       <header className="space-y-1">
         <h1 className="font-display text-2xl font-semibold text-foreground">Prospects</h1>
         <p className="text-sm text-muted-foreground">
-          Every business we cover is a sales lead for us, ranked by need score — high need means
-          high opportunity. Outreach is proof-led (&ldquo;X leads waiting near you&rdquo;). Admin-only.
+          Every business we cover is a sales lead for us, ranked by need score — high need
+          means high opportunity. Outreach is proof-led (&ldquo;X leads waiting near
+          you&rdquo;). Admin-only.
         </p>
       </header>
 
@@ -164,11 +181,21 @@ export default function AdminProspectsPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b text-left text-xs uppercase tracking-wide text-muted-foreground">
-                  <th scope="col" className="px-4 py-2 font-medium">Business</th>
-                  <th scope="col" className="px-4 py-2 font-medium">Need</th>
-                  <th scope="col" className="px-4 py-2 font-medium">Signals</th>
-                  <th scope="col" className="px-4 py-2 font-medium">Status</th>
-                  <th scope="col" className="px-4 py-2 font-medium">Outreach</th>
+                  <th scope="col" className="px-4 py-2 font-medium">
+                    Business
+                  </th>
+                  <th scope="col" className="px-4 py-2 font-medium">
+                    Need
+                  </th>
+                  <th scope="col" className="px-4 py-2 font-medium">
+                    Signals
+                  </th>
+                  <th scope="col" className="px-4 py-2 font-medium">
+                    Status
+                  </th>
+                  <th scope="col" className="px-4 py-2 font-medium">
+                    Outreach
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -177,12 +204,17 @@ export default function AdminProspectsPage() {
                   const signals = signalSummary(r.signals);
                   return (
                     <tr key={r.id} className="border-b last:border-0 align-top">
-                      <td className="px-4 py-2 font-mono text-xs" title={r.business_id ?? undefined}>
+                      <td
+                        className="px-4 py-2 font-mono text-xs"
+                        title={r.business_id ?? undefined}
+                      >
                         {shortId(r.business_id)}
                       </td>
                       <td className="px-4 py-2">
                         <div className="flex items-center gap-2">
-                          <span className="tabular-nums font-medium">{r.need_score ?? "—"}</span>
+                          <span className="tabular-nums font-medium">
+                            {r.need_score ?? "—"}
+                          </span>
                           <Badge tone={need.tone}>{need.label}</Badge>
                         </div>
                       </td>
@@ -197,14 +229,19 @@ export default function AdminProspectsPage() {
                                 className="inline-flex items-center gap-1 rounded bg-muted px-1.5 py-0.5 text-xs"
                               >
                                 <span className="capitalize">{s.key}</span>
-                                <span className="font-medium text-foreground">{s.value}</span>
+                                <span className="font-medium text-foreground">
+                                  {s.value}
+                                </span>
                               </span>
                             ))}
                           </span>
                         )}
                       </td>
                       <td className="px-4 py-2">
-                        <Badge tone={STATUS_TONE[r.status] ?? "muted"} className="capitalize">
+                        <Badge
+                          tone={STATUS_TONE[r.status] ?? "muted"}
+                          className="capitalize"
+                        >
                           {r.status}
                         </Badge>
                       </td>
@@ -251,7 +288,9 @@ function SummaryCard({
     <Card>
       <CardBody className="py-4">
         <p className="text-xs uppercase tracking-wide text-muted-foreground">{label}</p>
-        <p className={cn("mt-1 text-2xl font-semibold tabular-nums", toneClass)}>{value}</p>
+        <p className={cn("mt-1 text-2xl font-semibold tabular-nums", toneClass)}>
+          {value}
+        </p>
       </CardBody>
     </Card>
   );

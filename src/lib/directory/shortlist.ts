@@ -1,4 +1,5 @@
 import type { BusinessCardData } from "@/components/directory/BusinessCard";
+import { slugify } from "@/lib/format";
 
 // Server-safe directory data (no "use client"): both the client LocationPage and
 // the server page.tsx (which builds the ItemList/LocalBusiness JSON-LD) import
@@ -34,9 +35,5 @@ export const SHORTLIST: BusinessCardData[] = [
 
 /** Slugify a business name to its profile path segment (matches generateStaticParams). */
 export function businessSlug(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/&/g, "and")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
+  return slugify(name);
 }

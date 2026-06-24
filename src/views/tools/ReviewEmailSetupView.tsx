@@ -97,10 +97,9 @@ export function ReviewEmailSetupView() {
           <span className="text-primary">in one tap</span>
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-          Build a beautiful review-request email with a clickable star rating.
-          Happy customers go straight to Google; unhappy ones reach you privately
-          first — so you grow your rating and catch problems early. No signup, no
-          code.
+          Build a beautiful review-request email with a clickable star rating. Happy
+          customers go straight to Google; unhappy ones reach you privately first — so you
+          grow your rating and catch problems early. No signup, no code.
         </p>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
           <a href="#builder">
@@ -142,8 +141,8 @@ export function ReviewEmailSetupView() {
             Build your email
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Fill in your details — the preview updates live and is responsive on
-            desktop and mobile. Copy or download when you’re happy.
+            Fill in your details — the preview updates live and is responsive on desktop
+            and mobile. Copy or download when you’re happy.
           </p>
         </div>
         <ReviewEmailOnboarding />

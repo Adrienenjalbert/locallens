@@ -63,8 +63,7 @@ export function bayesianRating(
   priorStrength = 20,
 ): number {
   const v = Math.max(0, reviewCount);
-  const adjusted =
-    (v * rating + priorStrength * priorMean) / (v + priorStrength);
+  const adjusted = (v * rating + priorStrength * priorMean) / (v + priorStrength);
   return clamp01(adjusted / 5);
 }
 
@@ -86,10 +85,7 @@ function reviewSubScore(r: ReviewSignal): number {
   // Blend: quality-adjusted rating is primary, modulated by recency + volume +
   // cross-source agreement. Each factor in 0..1; weighted blend stays in 0..1.
   return clamp01(
-    base * 0.55 +
-      base * recency * 0.15 +
-      volume * 0.2 +
-      r.crossSourceConsistency * 0.1,
+    base * 0.55 + base * recency * 0.15 + volume * 0.2 + r.crossSourceConsistency * 0.1,
   );
 }
 

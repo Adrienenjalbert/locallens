@@ -13,7 +13,11 @@ import type { RouterContext, Candidate, ScoredCandidate } from "./types";
 import type { RouterPolicy } from "@config/types";
 
 const policy: RouterPolicy = {
-  trust_floor: { max_featured_above_fold: 1, affiliate_relevance_min: 0.55, answer_first: true },
+  trust_floor: {
+    max_featured_above_fold: 1,
+    affiliate_relevance_min: 0.55,
+    answer_first: true,
+  },
   weights: { affiliate: 1, lead: 1, subscription: 1, featured: 1 },
   policy_version: "bandit-v2-test",
 };
@@ -53,7 +57,9 @@ const lead = (ev: number): Candidate => ({
 describe("sampleBeta", () => {
   it("returns values in (0,1) and concentrates near the posterior mean", () => {
     const rng = seededRng(42);
-    const samples = Array.from({ length: 2000 }, () => sampleBeta({ alpha: 9, beta: 1 }, rng));
+    const samples = Array.from({ length: 2000 }, () =>
+      sampleBeta({ alpha: 9, beta: 1 }, rng),
+    );
     const mean = samples.reduce((a, b) => a + b, 0) / samples.length;
     expect(Math.min(...samples)).toBeGreaterThan(0);
     expect(Math.max(...samples)).toBeLessThan(1);
@@ -73,7 +79,9 @@ describe("BanditRouter trust floor (unchanged)", () => {
 
   it("never selects before the answer block renders", () => {
     const router = makeBanditRouter(policy, {}, 1);
-    const d = router.decide({ ...ctx, answerAlreadyRendered: false }, [affiliate(0.9, 5)]);
+    const d = router.decide({ ...ctx, answerAlreadyRendered: false }, [
+      affiliate(0.9, 5),
+    ]);
     expect(d.chosen).toBeNull();
   });
 
@@ -87,8 +95,14 @@ describe("BanditRouter trust floor (unchanged)", () => {
 describe("BanditRouter determinism + exploration", () => {
   it("is deterministic given the same seed", () => {
     const stats: ArmStats = {};
-    const a = makeBanditRouter(policy, stats, 7).decide(ctx, [affiliate(0.9, 1), lead(1)]);
-    const b = makeBanditRouter(policy, stats, 7).decide(ctx, [affiliate(0.9, 1), lead(1)]);
+    const a = makeBanditRouter(policy, stats, 7).decide(ctx, [
+      affiliate(0.9, 1),
+      lead(1),
+    ]);
+    const b = makeBanditRouter(policy, stats, 7).decide(ctx, [
+      affiliate(0.9, 1),
+      lead(1),
+    ]);
     expect(a.chosen?.ref).toBe(b.chosen?.ref);
   });
 

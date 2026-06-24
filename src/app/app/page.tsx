@@ -10,8 +10,8 @@ export default function AppOverviewPage() {
           Your business at a glance
         </h1>
         <p className="mt-1 text-muted-foreground">
-          Leads come in from your directory profile and tools, then flow through
-          your day: quote → job → invoice → paid.
+          Leads come in from your directory profile and tools, then flow through your day:
+          quote → job → invoice → paid.
         </p>
       </div>
 

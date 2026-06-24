@@ -1,13 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Check,
-  Copy,
-  ExternalLink,
-  FileText,
-  ListChecks,
-} from "lucide-react";
+import { Check, Copy, ExternalLink, FileText, ListChecks } from "lucide-react";
 import { Button, Card, CardBody } from "@/components/ui/primitives";
 
 // The questions we recommend for the private feedback form (the 1–3★ destination).
@@ -66,8 +60,8 @@ export function GoogleFormHelper() {
         {/* Step 1 — open a blank form */}
         <Step n={1} title="Open a new Google Form">
           <p className="text-sm text-muted-foreground">
-            Click below to create a blank form (you’ll need to be signed into a
-            Google account).
+            Click below to create a blank form (you’ll need to be signed into a Google
+            account).
           </p>
           <a
             href="https://docs.google.com/forms/create"
@@ -132,18 +126,17 @@ export function GoogleFormHelper() {
             </Button>
           </div>
           <p className="text-xs text-muted-foreground">
-            Tip: the email passes the star rating as <code>?rating=N</code>, so
-            you can leave question 1 — or pre-fill it later if you want.
+            Tip: the email passes the star rating as <code>?rating=N</code>, so you can
+            leave question 1 — or pre-fill it later if you want.
           </p>
         </Step>
 
         {/* Step 4 — confirmation message keeps it compliant */}
         <Step n={4} title="Set the confirmation message (keeps you compliant)">
           <p className="text-sm text-muted-foreground">
-            In the form’s <strong>Settings → Presentation → Confirmation
-            message</strong>, paste this so unhappy customers can still choose to
-            post publicly — this is what keeps the whole flow within Google’s
-            rules:
+            In the form’s <strong>Settings → Presentation → Confirmation message</strong>,
+            paste this so unhappy customers can still choose to post publicly — this is
+            what keeps the whole flow within Google’s rules:
           </p>
           <CopyRow
             label="Confirmation message"
@@ -157,10 +150,9 @@ export function GoogleFormHelper() {
         {/* Step 5 — get the link */}
         <Step n={5} title="Copy the form’s link → paste it above" last>
           <p className="text-sm text-muted-foreground">
-            Hit <strong>Send → link</strong> (the chain icon), tick{" "}
-            <em>Shorten URL</em>, and copy it. Paste that into the{" "}
-            <strong>“Private feedback form link”</strong> field in the builder
-            above and you’re done.
+            Hit <strong>Send → link</strong> (the chain icon), tick <em>Shorten URL</em>,
+            and copy it. Paste that into the <strong>“Private feedback form link”</strong>{" "}
+            field in the builder above and you’re done.
           </p>
         </Step>
       </CardBody>

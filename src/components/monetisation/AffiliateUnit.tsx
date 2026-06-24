@@ -31,10 +31,7 @@ export function AffiliateUnit({
   return (
     <aside
       aria-label="Partner offer"
-      className={cn(
-        "rounded-lg border border-dashed bg-muted/40 p-4",
-        className,
-      )}
+      className={cn("rounded-lg border border-dashed bg-muted/40 p-4", className)}
     >
       <div className="flex items-center justify-between">
         <span className="rounded-sm bg-muted px-1.5 py-0.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">
@@ -57,8 +54,8 @@ export function AffiliateUnit({
       </a>
       {data.disclosureRequired && (
         <p className="mt-2 text-xs text-muted-foreground">
-          We may earn a commission if you use this offer. This does not affect
-          how we rank local businesses.
+          We may earn a commission if you use this offer. This does not affect how we rank
+          local businesses.
         </p>
       )}
     </aside>

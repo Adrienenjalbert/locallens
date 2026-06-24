@@ -1,10 +1,5 @@
 import type { RouterPolicy, RevenueRail } from "@config/types";
-import type {
-  Candidate,
-  RouterContext,
-  RouterDecision,
-  ScoredCandidate,
-} from "./types";
+import type { Candidate, RouterContext, RouterDecision, ScoredCandidate } from "./types";
 import { checkConstraints, TRUST_FLOOR, type Constraint } from "./constraints";
 
 /**

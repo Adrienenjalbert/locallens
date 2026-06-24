@@ -5,7 +5,7 @@ import { siteUrl } from "@/lib/paths";
 // canonical (de-dupes the /vertical/location vs /tools overlap) plus OpenGraph +
 // Twitter cards (controls how AI answer engines and social surfaces render us).
 
-const SITE_NAME = "LocalLens";
+const SITE_NAME = "GreenList";
 
 export interface PageMetaInput {
   title: string;

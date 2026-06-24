@@ -2,7 +2,14 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { admin, type ExperimentRow } from "@/lib/admin/repo";
-import { Badge, Button, Card, CardBody, CardHeader, EmptyState } from "@/components/ui/primitives";
+import {
+  Badge,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  EmptyState,
+} from "@/components/ui/primitives";
 import { cn } from "@/lib/utils";
 
 // /admin/experiments — a focused view of every A/B test driving the loop. The
@@ -14,7 +21,10 @@ import { cn } from "@/lib/utils";
 
 type StatusFilter = "all" | "running" | "won" | "lost";
 
-const STATUS_TONE: Record<string, "success" | "danger" | "warning" | "primary" | "muted"> = {
+const STATUS_TONE: Record<
+  string,
+  "success" | "danger" | "warning" | "primary" | "muted"
+> = {
   won: "success",
   lost: "danger",
   paused: "warning",
@@ -75,7 +85,8 @@ export default function AdminExperimentsPage() {
   const counts = useMemo(() => {
     const c = { running: 0, won: 0, lost: 0 };
     for (const r of rows) {
-      if (r.status === "running" || r.status === "won" || r.status === "lost") c[r.status]++;
+      if (r.status === "running" || r.status === "won" || r.status === "lost")
+        c[r.status]++;
     }
     return c;
   }, [rows]);
@@ -88,10 +99,12 @@ export default function AdminExperimentsPage() {
   return (
     <div className="mx-auto max-w-5xl space-y-6 p-4 md:p-8">
       <header className="space-y-1">
-        <h1 className="font-display text-2xl font-semibold text-foreground">Experiments</h1>
+        <h1 className="font-display text-2xl font-semibold text-foreground">
+          Experiments
+        </h1>
         <p className="text-sm text-muted-foreground">
-          Every config default is the champion of an ongoing test. Expand a row to inspect its
-          variants and the result the improvement-agent recorded.
+          Every config default is the champion of an ongoing test. Expand a row to inspect
+          its variants and the result the improvement-agent recorded.
         </p>
       </header>
 
@@ -142,13 +155,27 @@ export default function AdminExperimentsPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b text-left text-xs uppercase tracking-wide text-muted-foreground">
-                  <th scope="col" className="px-4 py-2 font-medium">Experiment</th>
-                  <th scope="col" className="px-4 py-2 font-medium">Surface</th>
-                  <th scope="col" className="px-4 py-2 font-medium">Primary</th>
-                  <th scope="col" className="px-4 py-2 font-medium">Guardrail</th>
-                  <th scope="col" className="px-4 py-2 font-medium">Status</th>
-                  <th scope="col" className="px-4 py-2 font-medium">Started</th>
-                  <th scope="col" className="px-4 py-2 font-medium sr-only">Detail</th>
+                  <th scope="col" className="px-4 py-2 font-medium">
+                    Experiment
+                  </th>
+                  <th scope="col" className="px-4 py-2 font-medium">
+                    Surface
+                  </th>
+                  <th scope="col" className="px-4 py-2 font-medium">
+                    Primary
+                  </th>
+                  <th scope="col" className="px-4 py-2 font-medium">
+                    Guardrail
+                  </th>
+                  <th scope="col" className="px-4 py-2 font-medium">
+                    Status
+                  </th>
+                  <th scope="col" className="px-4 py-2 font-medium">
+                    Started
+                  </th>
+                  <th scope="col" className="px-4 py-2 font-medium sr-only">
+                    Detail
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -221,9 +248,13 @@ function ExperimentRows({
               )}
 
               <div>
-                <p className="text-xs uppercase tracking-wide text-muted-foreground">Variants</p>
+                <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                  Variants
+                </p>
                 {variants.length === 0 ? (
-                  <p className="mt-1 text-sm text-muted-foreground">No variants recorded.</p>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    No variants recorded.
+                  </p>
                 ) : (
                   <ul className="mt-1 space-y-1">
                     {variants.map((v, i) => (
@@ -247,7 +278,9 @@ function ExperimentRows({
 
               {row.result != null && (
                 <div>
-                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Result</p>
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                    Result
+                  </p>
                   <pre className="mt-1 overflow-x-auto rounded bg-background p-2 font-mono text-xs text-foreground">
                     {JSON.stringify(row.result, null, 2)}
                   </pre>
@@ -255,7 +288,9 @@ function ExperimentRows({
               )}
 
               {row.decided_at && (
-                <p className="text-xs text-muted-foreground">Decided {formatWhen(row.decided_at)}</p>
+                <p className="text-xs text-muted-foreground">
+                  Decided {formatWhen(row.decided_at)}
+                </p>
               )}
             </div>
           </td>
@@ -283,7 +318,9 @@ function SummaryCard({
     <Card>
       <CardBody className="py-4">
         <p className="text-xs uppercase tracking-wide text-muted-foreground">{label}</p>
-        <p className={cn("mt-1 text-2xl font-semibold tabular-nums", toneClass)}>{value}</p>
+        <p className={cn("mt-1 text-2xl font-semibold tabular-nums", toneClass)}>
+          {value}
+        </p>
       </CardBody>
     </Card>
   );

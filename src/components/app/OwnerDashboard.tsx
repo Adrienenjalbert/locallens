@@ -115,8 +115,8 @@ export function OwnerDashboard({ businessId }: { businessId?: string }) {
           Your profile &amp; rank
         </h1>
         <p className="mt-1 text-muted-foreground">
-          This is exactly what visitors see — and a transparent, prioritised list
-          of what will lift your ranking.
+          This is exactly what visitors see — and a transparent, prioritised list of what
+          will lift your ranking.
         </p>
       </header>
 
@@ -124,7 +124,10 @@ export function OwnerDashboard({ businessId }: { businessId?: string }) {
         <section aria-labelledby="score-heading">
           <Card>
             <CardHeader className="flex flex-wrap items-center justify-between gap-2">
-              <h2 id="score-heading" className="font-display text-lg font-semibold text-foreground">
+              <h2
+                id="score-heading"
+                className="font-display text-lg font-semibold text-foreground"
+              >
                 Your Quality Score
               </h2>
               <QualityScoreBadge score={breakdown.score} />
@@ -138,7 +141,8 @@ export function OwnerDashboard({ businessId }: { businessId?: string }) {
                         {COMPONENT_LABELS[row.key]}
                       </span>
                       <span className="tabular-nums text-muted-foreground">
-                        +{row.contribution.toFixed(1)} pts · {Math.round(row.weight * 100)}%
+                        +{row.contribution.toFixed(1)} pts ·{" "}
+                        {Math.round(row.weight * 100)}%
                       </span>
                     </div>
                     <div
@@ -166,7 +170,10 @@ export function OwnerDashboard({ businessId }: { businessId?: string }) {
             <CardHeader className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <TrendingUp className="h-5 w-5 text-primary" aria-hidden />
-                <h2 id="improve-heading" className="font-display text-lg font-semibold text-foreground">
+                <h2
+                  id="improve-heading"
+                  className="font-display text-lg font-semibold text-foreground"
+                >
                   Improve your rank
                 </h2>
               </div>
@@ -179,20 +186,30 @@ export function OwnerDashboard({ businessId }: { businessId?: string }) {
                 {checklist.map((item) => (
                   <li key={item.id} className="flex gap-3">
                     {item.done ? (
-                      <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-success" aria-hidden />
+                      <CheckCircle2
+                        className="mt-0.5 h-5 w-5 shrink-0 text-success"
+                        aria-hidden
+                      />
                     ) : (
-                      <Circle className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
+                      <Circle
+                        className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground"
+                        aria-hidden
+                      />
                     )}
                     <div>
                       <p
                         className={cn(
                           "text-sm font-medium",
-                          item.done ? "text-muted-foreground line-through" : "text-foreground",
+                          item.done
+                            ? "text-muted-foreground line-through"
+                            : "text-foreground",
                         )}
                       >
                         {item.title}
                       </p>
-                      <p className="mt-0.5 text-xs text-muted-foreground">{item.impact}</p>
+                      <p className="mt-0.5 text-xs text-muted-foreground">
+                        {item.impact}
+                      </p>
                     </div>
                   </li>
                 ))}

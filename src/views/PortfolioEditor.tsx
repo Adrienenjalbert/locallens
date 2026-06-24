@@ -2,7 +2,14 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import { ImagePlus, Trash2 } from "lucide-react";
-import { Button, Card, CardBody, CardHeader, Input, EmptyState } from "@/components/ui/primitives";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Input,
+  EmptyState,
+} from "@/components/ui/primitives";
 import { supabase } from "@/lib/supabase";
 
 // Mirrors the `portfolio_item` row shape (supabase/migrations/0001_foundation.sql).
@@ -167,7 +174,10 @@ export function PortfolioEditor({
             />
           </div>
           <div className="space-y-1.5">
-            <label htmlFor="pf-description" className="text-sm font-medium text-foreground">
+            <label
+              htmlFor="pf-description"
+              className="text-sm font-medium text-foreground"
+            >
               Description
             </label>
             <Input

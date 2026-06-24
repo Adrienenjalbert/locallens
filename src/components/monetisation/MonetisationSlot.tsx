@@ -1,6 +1,11 @@
 "use client";
 
-import type { Candidate, RouterContext, RouterDecision, SlotName } from "@/lib/revenue-router";
+import type {
+  Candidate,
+  RouterContext,
+  RouterDecision,
+  SlotName,
+} from "@/lib/revenue-router";
 import type { RouterPolicy } from "@config/types";
 import { useRouterDecision } from "@/lib/revenue-router/useRouterDecision";
 import type { ServerCandidate } from "@/lib/revenue-router/fetch-candidates";

@@ -11,6 +11,7 @@ import {
   Settings,
   LayoutGrid,
   Trophy,
+  Images,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -23,6 +24,7 @@ const NAV = [
   { href: "/app/quotes", label: "Quotes", icon: FileText },
   { href: "/app/jobs", label: "Jobs", icon: CalendarDays },
   { href: "/app/invoices", label: "Invoices", icon: Receipt },
+  { href: "/app/portfolio", label: "Portfolio", icon: Images },
   { href: "/app/profile", label: "Get found", icon: Trophy },
   { href: "/app/settings", label: "Settings", icon: Settings },
 ] as const;

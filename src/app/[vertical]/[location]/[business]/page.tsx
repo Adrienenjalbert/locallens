@@ -4,6 +4,7 @@ import { VERTICALS } from "@config/index";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { findPublishedPage } from "@/lib/seo/pages";
 import { siteUrl } from "@/lib/paths";
+import { formatMonthYear, titleCaseSlug } from "@/lib/format";
 import {
   buildBreadcrumbJsonLd,
   buildLocalBusinessJsonLd,
@@ -30,18 +31,7 @@ export function generateStaticParams(): RouteParams[] {
   ];
 }
 
-function titleCaseSlug(slug: string): string {
-  return slug
-    .split("-")
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(" ");
-}
-
-export function generateMetadata({
-  params,
-}: {
-  params: RouteParams;
-}): Metadata {
+export function generateMetadata({ params }: { params: RouteParams }): Metadata {
   const vertical = VERTICALS[params.vertical];
   const verticalName = (vertical?.name ?? params.vertical).toLowerCase();
   const businessName = titleCaseSlug(params.business);
@@ -54,14 +44,6 @@ export function generateMetadata({
     type: "article",
     modifiedTime: findPublishedPage(path)?.lastModified,
   });
-}
-
-function formatDate(iso?: string): string | undefined {
-  if (!iso) return undefined;
-  const d = new Date(iso);
-  return Number.isNaN(d.getTime())
-    ? undefined
-    : d.toLocaleDateString("en-GB", { month: "short", year: "numeric" });
 }
 
 export default function Page({ params }: { params: RouteParams }) {
@@ -106,7 +88,7 @@ export default function Page({ params }: { params: RouteParams }) {
         vertical={params.vertical}
         location={params.location}
         business={params.business}
-        lastUpdatedLabel={formatDate(published?.lastModified)}
+        lastUpdatedLabel={formatMonthYear(published?.lastModified)}
       />
     </>
   );

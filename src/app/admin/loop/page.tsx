@@ -7,7 +7,13 @@ import {
   type ExperimentRow,
   type RpmRow,
 } from "@/lib/admin/repo";
-import { Badge, Card, CardBody, CardHeader, EmptyState } from "@/components/ui/primitives";
+import {
+  Badge,
+  Card,
+  CardBody,
+  CardHeader,
+  EmptyState,
+} from "@/components/ui/primitives";
 import { cn, formatGBP } from "@/lib/utils";
 
 // /admin/loop — the CRISP-DM CONTROL TOWER. One screen that makes the
@@ -19,7 +25,10 @@ import { cn, formatGBP } from "@/lib/utils";
 // layout provides AdminShell.
 
 // Status → Badge tone, shared by the experiment list + timeline.
-const EXPERIMENT_TONE: Record<string, "success" | "danger" | "warning" | "primary" | "muted"> = {
+const EXPERIMENT_TONE: Record<
+  string,
+  "success" | "danger" | "warning" | "primary" | "muted"
+> = {
   won: "success",
   lost: "danger",
   paused: "warning",
@@ -38,7 +47,11 @@ const RUBRIC: { surface: string; primary: string; guardrail: string }[] = [
   { surface: "pseo", primary: "RPM / page type", guardrail: "Thin-content / index rate" },
   { surface: "tool", primary: "Completion %", guardrail: "Bounce / CWV" },
   { surface: "router", primary: "RPM", guardrail: "Qualified actions" },
-  { surface: "comms", primary: "Quote→won / conversion", guardrail: "Unsubscribe / spam" },
+  {
+    surface: "comms",
+    primary: "Quote→won / conversion",
+    guardrail: "Unsubscribe / spam",
+  },
 ];
 
 function formatWhen(iso: string): string {
@@ -77,7 +90,8 @@ export default function AdminLoopPage() {
   const totals = useMemo(() => {
     const sessions = rpm.reduce((a, r) => a + (r.sessions ?? 0), 0);
     const revenue = rpm.reduce((a, r) => a + (r.revenue ?? 0), 0);
-    const overallRpm = sessions > 0 ? Math.round((revenue / sessions) * 1000 * 100) / 100 : 0;
+    const overallRpm =
+      sessions > 0 ? Math.round((revenue / sessions) * 1000 * 100) / 100 : 0;
     return { sessions, revenue, overallRpm };
   }, [rpm]);
 
@@ -92,30 +106,50 @@ export default function AdminLoopPage() {
   }, [rpm, totals.overallRpm]);
 
   const experimentRows = useMemo(
-    () => [...experiments].sort((a, b) => (a.status === "running" ? -1 : 1) - (b.status === "running" ? -1 : 1)),
+    () =>
+      [...experiments].sort(
+        (a, b) => (a.status === "running" ? -1 : 1) - (b.status === "running" ? -1 : 1),
+      ),
     [experiments],
   );
 
   return (
     <div className="mx-auto max-w-5xl space-y-6 p-4 md:p-8">
       <header className="space-y-1">
-        <h1 className="font-display text-2xl font-semibold text-foreground">Improvement loop</h1>
+        <h1 className="font-display text-2xl font-semibold text-foreground">
+          Improvement loop
+        </h1>
         <p className="text-sm text-muted-foreground">
-          The control tower for the CRISP-DM self-improving loop — RPM North Star, live experiments
-          across all five surfaces, and the decision log the weekly improvement-agent writes.
+          The control tower for the CRISP-DM self-improving loop — RPM North Star, live
+          experiments across all five surfaces, and the decision log the weekly
+          improvement-agent writes.
         </p>
       </header>
 
       {/* North-Star RPM summary */}
       <div className="grid grid-cols-3 gap-3">
-        <SummaryCard label="Overall RPM" value={loading ? "…" : `£${totals.overallRpm}`} tone="primary" />
-        <SummaryCard label="Sessions" value={loading ? "…" : totals.sessions.toLocaleString("en-GB")} tone="muted" />
-        <SummaryCard label="Revenue" value={loading ? "…" : formatGBP(totals.revenue)} tone="success" />
+        <SummaryCard
+          label="Overall RPM"
+          value={loading ? "…" : `£${totals.overallRpm}`}
+          tone="primary"
+        />
+        <SummaryCard
+          label="Sessions"
+          value={loading ? "…" : totals.sessions.toLocaleString("en-GB")}
+          tone="muted"
+        />
+        <SummaryCard
+          label="Revenue"
+          value={loading ? "…" : formatGBP(totals.revenue)}
+          tone="success"
+        />
       </div>
 
       {/* Per-page-type RPM table */}
       <section className="space-y-2">
-        <h2 className="font-display text-lg font-semibold text-foreground">RPM by page type</h2>
+        <h2 className="font-display text-lg font-semibold text-foreground">
+          RPM by page type
+        </h2>
         {loading ? (
           <p className="text-sm text-muted-foreground">Loading RPM…</p>
         ) : rpm.length === 0 ? (
@@ -129,19 +163,38 @@ export default function AdminLoopPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b text-left text-xs uppercase tracking-wide text-muted-foreground">
-                    <th scope="col" className="px-4 py-2 font-medium">Page type</th>
-                    <th scope="col" className="px-4 py-2 font-medium">Sessions</th>
-                    <th scope="col" className="px-4 py-2 font-medium">Revenue</th>
-                    <th scope="col" className="px-4 py-2 font-medium">RPM</th>
+                    <th scope="col" className="px-4 py-2 font-medium">
+                      Page type
+                    </th>
+                    <th scope="col" className="px-4 py-2 font-medium">
+                      Sessions
+                    </th>
+                    <th scope="col" className="px-4 py-2 font-medium">
+                      Revenue
+                    </th>
+                    <th scope="col" className="px-4 py-2 font-medium">
+                      RPM
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {rpm.map((r, i) => (
-                    <tr key={`${r.page_type ?? "none"}-${r.vertical_id ?? i}`} className="border-b last:border-0">
-                      <td className="px-4 py-2 capitalize">{pageTypeLabel(r.page_type)}</td>
-                      <td className="px-4 py-2 tabular-nums">{(r.sessions ?? 0).toLocaleString("en-GB")}</td>
-                      <td className="px-4 py-2 tabular-nums">{formatGBP(r.revenue ?? 0)}</td>
-                      <td className="px-4 py-2 font-medium tabular-nums">£{r.rpm ?? 0}</td>
+                    <tr
+                      key={`${r.page_type ?? "none"}-${r.vertical_id ?? i}`}
+                      className="border-b last:border-0"
+                    >
+                      <td className="px-4 py-2 capitalize">
+                        {pageTypeLabel(r.page_type)}
+                      </td>
+                      <td className="px-4 py-2 tabular-nums">
+                        {(r.sessions ?? 0).toLocaleString("en-GB")}
+                      </td>
+                      <td className="px-4 py-2 tabular-nums">
+                        {formatGBP(r.revenue ?? 0)}
+                      </td>
+                      <td className="px-4 py-2 font-medium tabular-nums">
+                        £{r.rpm ?? 0}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -153,7 +206,9 @@ export default function AdminLoopPage() {
 
       {/* Experiments */}
       <section className="space-y-2">
-        <h2 className="font-display text-lg font-semibold text-foreground">Experiments</h2>
+        <h2 className="font-display text-lg font-semibold text-foreground">
+          Experiments
+        </h2>
         {loading ? (
           <p className="text-sm text-muted-foreground">Loading experiments…</p>
         ) : experimentRows.length === 0 ? (
@@ -167,11 +222,21 @@ export default function AdminLoopPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b text-left text-xs uppercase tracking-wide text-muted-foreground">
-                    <th scope="col" className="px-4 py-2 font-medium">Experiment</th>
-                    <th scope="col" className="px-4 py-2 font-medium">Surface</th>
-                    <th scope="col" className="px-4 py-2 font-medium">Primary</th>
-                    <th scope="col" className="px-4 py-2 font-medium">Guardrail</th>
-                    <th scope="col" className="px-4 py-2 font-medium">Status</th>
+                    <th scope="col" className="px-4 py-2 font-medium">
+                      Experiment
+                    </th>
+                    <th scope="col" className="px-4 py-2 font-medium">
+                      Surface
+                    </th>
+                    <th scope="col" className="px-4 py-2 font-medium">
+                      Primary
+                    </th>
+                    <th scope="col" className="px-4 py-2 font-medium">
+                      Guardrail
+                    </th>
+                    <th scope="col" className="px-4 py-2 font-medium">
+                      Status
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -179,10 +244,17 @@ export default function AdminLoopPage() {
                     <tr key={e.id} className="border-b last:border-0">
                       <td className="px-4 py-2">{e.name}</td>
                       <td className="px-4 py-2 capitalize">{e.surface}</td>
-                      <td className="px-4 py-2 text-muted-foreground">{e.primary_metric}</td>
-                      <td className="px-4 py-2 text-muted-foreground">{e.guardrail_metric ?? "—"}</td>
+                      <td className="px-4 py-2 text-muted-foreground">
+                        {e.primary_metric}
+                      </td>
+                      <td className="px-4 py-2 text-muted-foreground">
+                        {e.guardrail_metric ?? "—"}
+                      </td>
                       <td className="px-4 py-2">
-                        <Badge tone={EXPERIMENT_TONE[e.status] ?? "muted"} className="capitalize">
+                        <Badge
+                          tone={EXPERIMENT_TONE[e.status] ?? "muted"}
+                          className="capitalize"
+                        >
                           {e.status}
                         </Badge>
                       </td>
@@ -197,7 +269,9 @@ export default function AdminLoopPage() {
 
       {/* Decision-log timeline */}
       <section className="space-y-2">
-        <h2 className="font-display text-lg font-semibold text-foreground">Decision log</h2>
+        <h2 className="font-display text-lg font-semibold text-foreground">
+          Decision log
+        </h2>
         {loading ? (
           <p className="text-sm text-muted-foreground">Loading decisions…</p>
         ) : decisions.length === 0 ? (
@@ -209,15 +283,25 @@ export default function AdminLoopPage() {
           <Card>
             <CardBody className="space-y-3">
               {decisions.map((d) => (
-                <div key={d.id} className="flex items-start gap-3 border-b pb-3 last:border-0 last:pb-0">
-                  <Badge tone={DECISION_TONE[d.decision] ?? "muted"} className="mt-0.5 shrink-0 capitalize">
+                <div
+                  key={d.id}
+                  className="flex items-start gap-3 border-b pb-3 last:border-0 last:pb-0"
+                >
+                  <Badge
+                    tone={DECISION_TONE[d.decision] ?? "muted"}
+                    className="mt-0.5 shrink-0 capitalize"
+                  >
                     {d.decision}
                   </Badge>
                   <div className="min-w-0 space-y-1">
                     <p className="text-sm text-foreground">{d.rationale ?? "—"}</p>
                     <p className="text-xs text-muted-foreground">
-                      {d.surface ? <span className="capitalize">{d.surface}</span> : "loop summary"} ·{" "}
-                      {formatWhen(d.created_at)}
+                      {d.surface ? (
+                        <span className="capitalize">{d.surface}</span>
+                      ) : (
+                        "loop summary"
+                      )}{" "}
+                      · {formatWhen(d.created_at)}
                     </p>
                   </div>
                 </div>
@@ -229,10 +313,12 @@ export default function AdminLoopPage() {
 
       {/* Surfaces vs rubric */}
       <section className="space-y-2">
-        <h2 className="font-display text-lg font-semibold text-foreground">Surfaces vs rubric</h2>
+        <h2 className="font-display text-lg font-semibold text-foreground">
+          Surfaces vs rubric
+        </h2>
         <p className="text-sm text-muted-foreground">
-          Each surface optimises one primary metric under a guardrail. Ranking and routing are
-          human-in-the-loop — the agent proposes, a human promotes.
+          Each surface optimises one primary metric under a guardrail. Ranking and routing
+          are human-in-the-loop — the agent proposes, a human promotes.
         </p>
         <div className="grid gap-3 sm:grid-cols-2">
           {RUBRIC.map((row) => (
@@ -250,7 +336,10 @@ export default function AdminLoopPage() {
                   <span className="text-muted-foreground">Primary:</span>{" "}
                   <span className="font-medium text-foreground">{row.primary}</span>
                   {liveBySurface[row.surface] ? (
-                    <span className="text-muted-foreground"> · live {liveBySurface[row.surface]}</span>
+                    <span className="text-muted-foreground">
+                      {" "}
+                      · live {liveBySurface[row.surface]}
+                    </span>
                   ) : null}
                 </p>
                 <p>
@@ -284,7 +373,9 @@ function SummaryCard({
     <Card>
       <CardBody className="py-4">
         <p className="text-xs uppercase tracking-wide text-muted-foreground">{label}</p>
-        <p className={cn("mt-1 text-2xl font-semibold tabular-nums", toneClass)}>{value}</p>
+        <p className={cn("mt-1 text-2xl font-semibold tabular-nums", toneClass)}>
+          {value}
+        </p>
       </CardBody>
     </Card>
   );

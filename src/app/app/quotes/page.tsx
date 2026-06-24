@@ -66,7 +66,9 @@ export default function QuotesPage() {
   const draftTotal = lineItemsTotal(toLineItems());
 
   function updateItem(index: number, patch: Partial<DraftItem>) {
-    setItems((prev) => prev.map((item, i) => (i === index ? { ...item, ...patch } : item)));
+    setItems((prev) =>
+      prev.map((item, i) => (i === index ? { ...item, ...patch } : item)),
+    );
   }
 
   function resetBuilder() {
@@ -95,7 +97,9 @@ export default function QuotesPage() {
       <header className="space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div>
-            <h1 className="font-display text-2xl font-semibold text-foreground">Quotes</h1>
+            <h1 className="font-display text-2xl font-semibold text-foreground">
+              Quotes
+            </h1>
             <p className="mt-1 text-muted-foreground">
               Price the job and send it while you have their attention.
             </p>
@@ -113,14 +117,19 @@ export default function QuotesPage() {
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
-              <h2 className="font-display text-lg font-semibold text-foreground">New quote</h2>
+              <h2 className="font-display text-lg font-semibold text-foreground">
+                New quote
+              </h2>
               {leadId && <Badge tone="primary">From lead</Badge>}
             </div>
           </CardHeader>
           <CardBody className="space-y-4">
             <ul className="space-y-3">
               {items.map((item, index) => (
-                <li key={index} className="grid grid-cols-1 gap-2 sm:grid-cols-[1fr_auto_auto_auto]">
+                <li
+                  key={index}
+                  className="grid grid-cols-1 gap-2 sm:grid-cols-[1fr_auto_auto_auto]"
+                >
                   <Input
                     aria-label="Description"
                     placeholder="Description (e.g. Lawn mowing)"
@@ -180,7 +189,8 @@ export default function QuotesPage() {
                   Cancel
                 </Button>
                 <Button onClick={saveQuote} disabled={saving || draftTotal === 0}>
-                  <Save className="h-4 w-4" aria-hidden /> {saving ? "Saving…" : "Save quote"}
+                  <Save className="h-4 w-4" aria-hidden />{" "}
+                  {saving ? "Saving…" : "Save quote"}
                 </Button>
               </div>
             </div>

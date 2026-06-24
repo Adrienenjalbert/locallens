@@ -16,10 +16,7 @@ export function FaqBlock({
 
   return (
     <section aria-labelledby="faq-heading" className="rounded-lg border bg-card p-5">
-      <h2
-        id="faq-heading"
-        className="font-display text-xl font-semibold text-foreground"
-      >
+      <h2 id="faq-heading" className="font-display text-xl font-semibold text-foreground">
         {heading}
       </h2>
       <dl className="mt-3 divide-y divide-border">

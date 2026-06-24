@@ -187,9 +187,9 @@ export function ReviewEmailOnboarding() {
     (f) => cfg[f.key] === DEFAULT_REVIEW_EMAIL_COPY[f.key],
   );
 
-  const requiredMissing = FIELDS.filter(
-    (f) => f.required && !cfg[f.key].trim(),
-  ).map((f) => f.label);
+  const requiredMissing = FIELDS.filter((f) => f.required && !cfg[f.key].trim()).map(
+    (f) => f.label,
+  );
   const ready = requiredMissing.length === 0;
 
   const copy = async () => {
@@ -237,9 +237,7 @@ export function ReviewEmailOnboarding() {
             {FIELDS.map((field) => {
               const value = cfg[field.key];
               const showUrlWarn =
-                field.type === "url" &&
-                value.trim().length > 0 &&
-                !isLikelyUrl(value);
+                field.type === "url" && value.trim().length > 0 && !isLikelyUrl(value);
               return (
                 <div key={field.key}>
                   <label
@@ -265,7 +263,7 @@ export function ReviewEmailOnboarding() {
                     )}
                     <Input
                       id={`f-${field.key}`}
-                      type={field.type === "color" ? "text" : field.type ?? "text"}
+                      type={field.type === "color" ? "text" : (field.type ?? "text")}
                       inputMode={field.type === "url" ? "url" : undefined}
                       value={value}
                       placeholder={field.placeholder}
@@ -344,9 +342,7 @@ export function ReviewEmailOnboarding() {
                 className="mt-2"
                 type="url"
                 inputMode="url"
-                value={
-                  cfg.logoUrl.startsWith("data:") ? "" : cfg.logoUrl
-                }
+                value={cfg.logoUrl.startsWith("data:") ? "" : cfg.logoUrl}
                 placeholder="…or paste a hosted image URL"
                 onChange={(e) => set("logoUrl", e.target.value)}
               />
@@ -364,9 +360,7 @@ export function ReviewEmailOnboarding() {
 
           {/* Interactive routing demo — tap a star to SEE the conditional logic */}
           <div className="rounded-lg border bg-muted/30 p-4">
-            <p className="text-sm font-medium text-foreground">
-              Try the star routing
-            </p>
+            <p className="text-sm font-medium text-foreground">Try the star routing</p>
             <p className="mt-0.5 text-xs text-muted-foreground">
               Tap a star to see where that customer would be sent.
             </p>
@@ -404,19 +398,25 @@ export function ReviewEmailOnboarding() {
               >
                 {demoStars >= 4 ? (
                   <>
-                    <Star className="mt-0.5 h-4 w-4 shrink-0 fill-success text-success" aria-hidden />
+                    <Star
+                      className="mt-0.5 h-4 w-4 shrink-0 fill-success text-success"
+                      aria-hidden
+                    />
                     <span>
-                      <strong>{demoStars}★ goes to your Google review page.</strong>{" "}
-                      Happy customers post publicly, lifting your rating and rank.
+                      <strong>{demoStars}★ goes to your Google review page.</strong> Happy
+                      customers post publicly, lifting your rating and rank.
                     </span>
                   </>
                 ) : (
                   <>
-                    <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-warning" aria-hidden />
+                    <ShieldCheck
+                      className="mt-0.5 h-4 w-4 shrink-0 text-warning"
+                      aria-hidden
+                    />
                     <span>
                       <strong>{demoStars}★ goes to your private feedback form.</strong>{" "}
-                      You hear about it first and can put it right. They can
-                      still choose to post on Google afterwards.
+                      You hear about it first and can put it right. They can still choose
+                      to post on Google afterwards.
                     </span>
                   </>
                 )}
@@ -438,8 +438,8 @@ export function ReviewEmailOnboarding() {
                 Overwrite any line. Type{" "}
                 <code className="rounded bg-muted px-1">{"{name}"}</code> for the
                 customer&rsquo;s first name and{" "}
-                <code className="rounded bg-muted px-1">{"{business}"}</code> for
-                your business name.
+                <code className="rounded bg-muted px-1">{"{business}"}</code> for your
+                business name.
               </p>
               {COPY_FIELDS.map((field) => (
                 <div key={field.key}>
@@ -484,8 +484,8 @@ export function ReviewEmailOnboarding() {
             <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-success" aria-hidden />
             <p className="text-xs leading-relaxed text-muted-foreground">
               <span className="font-medium text-foreground">Honest by design.</span>{" "}
-              Everyone can still post on Google, no review gating, so you stay
-              within Google &amp; FTC rules while collecting more 5-star reviews.
+              Everyone can still post on Google, no review gating, so you stay within
+              Google &amp; FTC rules while collecting more 5-star reviews.
             </p>
           </div>
         </CardBody>
@@ -497,9 +497,7 @@ export function ReviewEmailOnboarding() {
           <div className="flex items-center justify-between border-b bg-muted/40 px-4 py-2.5">
             <div className="flex items-center gap-2">
               <Star className="h-4 w-4 text-primary" aria-hidden />
-              <span className="text-sm font-medium text-foreground">
-                Live preview
-              </span>
+              <span className="text-sm font-medium text-foreground">Live preview</span>
             </div>
             {/* Desktop / Mobile toggle */}
             <div
@@ -529,12 +527,7 @@ export function ReviewEmailOnboarding() {
         </Card>
 
         <div className="flex flex-col gap-2 sm:flex-row">
-          <Button
-            type="button"
-            onClick={copy}
-            disabled={!ready}
-            className="flex-1"
-          >
+          <Button type="button" onClick={copy} disabled={!ready} className="flex-1">
             {copied ? (
               <>
                 <Check className="h-4 w-4" aria-hidden /> Copied!
@@ -568,22 +561,22 @@ export function ReviewEmailOnboarding() {
           </summary>
           <ol className="mt-3 list-decimal space-y-1.5 pl-5 text-muted-foreground">
             <li>
-              Tweak any wording here first under{" "}
-              <strong>Customise the wording</strong>, then hit{" "}
-              <strong>Copy HTML</strong> (or download the file).
+              Tweak any wording here first under <strong>Customise the wording</strong>,
+              then hit <strong>Copy HTML</strong> (or download the file).
             </li>
             <li>
-              In Gmail, click the three dots, choose insert/paste, or in
-              Outlook and most email tools paste it into the{" "}
-              <strong>HTML</strong> or <strong>code</strong> view. You can also
-              import the downloaded file.
+              In Gmail, click the three dots, choose insert/paste, or in Outlook and most
+              email tools paste it into the <strong>HTML</strong> or <strong>code</strong>{" "}
+              view. You can also import the downloaded file.
             </li>
             <li>
-              Once pasted, you can still edit the text right there in your email
-              tool, the wording is plain and easy to change.
+              Once pasted, you can still edit the text right there in your email tool, the
+              wording is plain and easy to change.
             </li>
             <li>Send a test to yourself and tap each star to check the links.</li>
-            <li>Send within 24 to 48 hours of finishing the job for the best response.</li>
+            <li>
+              Send within 24 to 48 hours of finishing the job for the best response.
+            </li>
           </ol>
           <a
             href="https://support.google.com/business/answer/3474122"

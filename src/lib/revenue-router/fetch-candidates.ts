@@ -29,9 +29,7 @@ export interface CandidateRequest {
   sessionId?: string;
 }
 
-export async function fetchCandidates(
-  req: CandidateRequest,
-): Promise<ServerCandidate[]> {
+export async function fetchCandidates(req: CandidateRequest): Promise<ServerCandidate[]> {
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
   if (!base) return []; // no backend configured → render nothing (honest default)
 

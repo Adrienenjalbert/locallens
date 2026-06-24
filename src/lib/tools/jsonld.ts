@@ -72,9 +72,7 @@ export function buildPriceRangeJsonLd(input: PriceRangeInput): PriceRangeJsonLd 
       lowPrice: input.lowPrice,
       highPrice: input.highPrice,
       offerCount: 2,
-      ...(input.priceValidUntil
-        ? { priceValidUntil: input.priceValidUntil }
-        : {}),
+      ...(input.priceValidUntil ? { priceValidUntil: input.priceValidUntil } : {}),
     },
   };
 }
@@ -120,9 +118,7 @@ export interface LocalBusinessJsonLd {
   dateModified?: string;
 }
 
-export function buildLocalBusinessJsonLd(
-  input: LocalBusinessInput,
-): LocalBusinessJsonLd {
+export function buildLocalBusinessJsonLd(input: LocalBusinessInput): LocalBusinessJsonLd {
   return {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
@@ -163,9 +159,7 @@ export interface BreadcrumbListJsonLd {
   }>;
 }
 
-export function buildBreadcrumbJsonLd(
-  items: BreadcrumbItem[],
-): BreadcrumbListJsonLd {
+export function buildBreadcrumbJsonLd(items: BreadcrumbItem[]): BreadcrumbListJsonLd {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -214,6 +208,170 @@ export function buildItemListJsonLd(entries: ItemListEntry[]): ItemListJsonLd {
       name: entry.name,
       url: entry.url,
     })),
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Portfolio project schema. A `CreativeWork` carrying the project images, the
+// owning business as `creator`, and (where present) the verified post-job
+// `Review`. This is the unique, machine-extractable unit each project page adds
+// to the graph — the proprietary content that makes the pages non-thin.
+// ---------------------------------------------------------------------------
+
+export interface CreativeWorkInput {
+  /** Absolute URL of the project page (its @id and url). */
+  url: string;
+  name: string;
+  description: string;
+  /** Absolute image URLs shown on the page. */
+  images: string[];
+  /** The business that did the work. */
+  creator: { name: string; url: string };
+  /** ISO date the project completed. */
+  dateCreated?: string;
+  /** Human place the work was done, e.g. "Didsbury". */
+  locationCreated?: string;
+  /** Tags (service, style, materials) — aids topical relevance. */
+  keywords?: string[];
+  /** A single verified review attached to this project. */
+  review?: { author: string; ratingValue: number; reviewBody: string };
+}
+
+export interface CreativeWorkJsonLd {
+  "@context": "https://schema.org";
+  "@type": "CreativeWork";
+  "@id": string;
+  url: string;
+  name: string;
+  description: string;
+  image: string[];
+  creator: { "@type": "LocalBusiness"; name: string; url: string };
+  dateCreated?: string;
+  locationCreated?: { "@type": "Place"; name: string };
+  keywords?: string;
+  review?: {
+    "@type": "Review";
+    author: { "@type": "Person"; name: string };
+    reviewRating: { "@type": "Rating"; ratingValue: number; bestRating: 5 };
+    reviewBody: string;
+  };
+}
+
+export function buildCreativeWorkJsonLd(input: CreativeWorkInput): CreativeWorkJsonLd {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "@id": input.url,
+    url: input.url,
+    name: input.name,
+    description: input.description,
+    image: input.images,
+    creator: { "@type": "LocalBusiness", name: input.creator.name, url: input.creator.url },
+    ...(input.dateCreated ? { dateCreated: input.dateCreated } : {}),
+    ...(input.locationCreated
+      ? { locationCreated: { "@type": "Place" as const, name: input.locationCreated } }
+      : {}),
+    ...(input.keywords && input.keywords.length
+      ? { keywords: input.keywords.join(", ") }
+      : {}),
+    ...(input.review
+      ? {
+          review: {
+            "@type": "Review" as const,
+            author: { "@type": "Person" as const, name: input.review.author },
+            reviewRating: {
+              "@type": "Rating" as const,
+              ratingValue: input.review.ratingValue,
+              bestRating: 5 as const,
+            },
+            reviewBody: input.review.reviewBody,
+          },
+        }
+      : {}),
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Free-tool directory schema. `SoftwareApplication` is the unit answer engines
+// and Google use to describe a web tool/utility; pairing it with a free
+// `Offer` (price 0) is what makes "free {tool}" queries eligible to cite us.
+// ---------------------------------------------------------------------------
+
+export interface SoftwareApplicationInput {
+  /** Absolute URL of the tool page (its @id and url). */
+  url: string;
+  name: string;
+  description: string;
+  /** e.g. "SEO tools" / "Marketing tools" — human category label. */
+  applicationCategory: string;
+  /** ISO date the tool last changed (freshness signal). */
+  dateModified?: string;
+}
+
+/**
+ * A Schema.org SoftwareApplication describing a free, browser-based tool. The
+ * zero-price Offer is the signal that lets it surface for "free X" queries.
+ */
+export interface SoftwareApplicationJsonLd {
+  "@context": "https://schema.org";
+  "@type": "SoftwareApplication";
+  "@id": string;
+  url: string;
+  name: string;
+  description: string;
+  applicationCategory: string;
+  operatingSystem: "Any";
+  offers: { "@type": "Offer"; price: "0"; priceCurrency: "USD" };
+  dateModified?: string;
+}
+
+export function buildSoftwareApplicationJsonLd(
+  input: SoftwareApplicationInput,
+): SoftwareApplicationJsonLd {
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "@id": input.url,
+    url: input.url,
+    name: input.name,
+    description: input.description,
+    applicationCategory: input.applicationCategory,
+    operatingSystem: "Any",
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    ...(input.dateModified ? { dateModified: input.dateModified } : {}),
+  };
+}
+
+/**
+ * A Schema.org CollectionPage with an embedded ItemList — the unit answer
+ * engines extract for "free {category} tools" listing queries (the hub +
+ * category pages). Mirrors exactly how the list renders to the user.
+ */
+export interface CollectionPageJsonLd {
+  "@context": "https://schema.org";
+  "@type": "CollectionPage";
+  "@id": string;
+  url: string;
+  name: string;
+  description: string;
+  mainEntity: ItemListJsonLd;
+}
+
+export function buildCollectionPageJsonLd(input: {
+  url: string;
+  name: string;
+  description: string;
+  items: ItemListEntry[];
+}): CollectionPageJsonLd {
+  const mainEntity = buildItemListJsonLd(input.items);
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": input.url,
+    url: input.url,
+    name: input.name,
+    description: input.description,
+    mainEntity,
   };
 }
 

@@ -63,7 +63,9 @@ export interface ProspectRow {
   status: string;
 }
 
-async function read<T>(query: PromiseLike<{ data: T[] | null; error: unknown }>): Promise<T[]> {
+async function read<T>(
+  query: PromiseLike<{ data: T[] | null; error: unknown }>,
+): Promise<T[]> {
   const { data, error } = await query;
   if (error) {
     console.error("admin.read", error);

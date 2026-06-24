@@ -107,7 +107,9 @@ export function lineItemsTotal(items: LineItem[]): number {
 }
 
 /** Hours since a lead arrived without a first response — the speed-to-lead KPI. */
-export function speedToLeadHours(lead: Pick<Lead, "received_at" | "first_response_at">): number {
+export function speedToLeadHours(
+  lead: Pick<Lead, "received_at" | "first_response_at">,
+): number {
   const end = lead.first_response_at ? new Date(lead.first_response_at) : new Date();
   return (end.getTime() - new Date(lead.received_at).getTime()) / 3_600_000;
 }

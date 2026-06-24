@@ -10,7 +10,6 @@ export function withBasePath(path: string): string {
 }
 
 export function siteUrl(path = "/"): string {
-  const origin =
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://localhost:3000";
+  const origin = process.env.NEXT_PUBLIC_SITE_URL ?? "https://localhost:3000";
   return `${origin}${withBasePath(path)}`;
 }

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   buildBreadcrumbJsonLd,
+  buildCreativeWorkJsonLd,
   buildFaqPageJsonLd,
   buildItemListJsonLd,
   buildLocalBusinessJsonLd,
@@ -77,6 +78,45 @@ describe("buildItemListJsonLd", () => {
     expect(ld.numberOfItems).toBe(2);
     expect(ld.itemListOrder).toBe("https://schema.org/ItemListOrderDescending");
     expect(ld.itemListElement[0]).toMatchObject({ position: 1, name: "A" });
+  });
+});
+
+describe("buildCreativeWorkJsonLd", () => {
+  const base = {
+    url: "https://example.com/gardeners/manchester/greenthumb-gardens/work/patio/",
+    name: "Modern porcelain patio in Didsbury",
+    description: "A 40m² porcelain patio with drainage.",
+    images: ["https://img.example.com/before.jpg", "https://img.example.com/after.jpg"],
+    creator: {
+      name: "GreenThumb Gardens",
+      url: "https://example.com/gardeners/manchester/greenthumb-gardens/",
+    },
+    dateCreated: "2026-05-20",
+    locationCreated: "Didsbury",
+    keywords: ["landscaping", "modern", "porcelain"],
+  };
+
+  it("emits a CreativeWork with images, creator and joined keywords", () => {
+    const ld = buildCreativeWorkJsonLd(base);
+    expect(ld["@type"]).toBe("CreativeWork");
+    expect(ld.image).toHaveLength(2);
+    expect(ld.creator).toMatchObject({ "@type": "LocalBusiness", name: "GreenThumb Gardens" });
+    expect(ld.locationCreated).toEqual({ "@type": "Place", name: "Didsbury" });
+    expect(ld.keywords).toBe("landscaping, modern, porcelain");
+    expect(ld.review).toBeUndefined();
+  });
+
+  it("embeds a verified review when supplied", () => {
+    const ld = buildCreativeWorkJsonLd({
+      ...base,
+      review: { author: "Sarah M.", ratingValue: 5, reviewBody: "Brilliant work." },
+    });
+    expect(ld.review).toMatchObject({
+      "@type": "Review",
+      author: { "@type": "Person", name: "Sarah M." },
+      reviewRating: { "@type": "Rating", ratingValue: 5, bestRating: 5 },
+      reviewBody: "Brilliant work.",
+    });
   });
 });
 
